@@ -6,7 +6,7 @@ void C_GamePlay::Init()
 	m_player.SetTex(&m_playerTex);
 
 	m_enemyTex.Load("Texture/enemy.png");
-	m_player.SetTex(&m_enemyTex);
+	m_enemy.SetTex(&m_enemyTex);
 
 	GameCnt = 0;
 	m_player.Init();

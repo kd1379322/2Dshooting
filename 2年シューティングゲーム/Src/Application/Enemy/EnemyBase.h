@@ -23,7 +23,7 @@ public:
 
 protected:
 
-	const float m_moveSpeed = -16.0f;	//移動速度
+	const float m_moveSpeed = -8.0f;	//移動速度
 
 	const float ScreenTop = 360;
 	const float ScreenBottom = -360;
