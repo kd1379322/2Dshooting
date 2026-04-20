@@ -1,5 +1,6 @@
 #pragma once
 #include"Application/Player/Player.h"
+#include"Application/Enemy/EnemyBase.h"
 
 class C_GamePlay
 {
