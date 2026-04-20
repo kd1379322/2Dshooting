@@ -2,6 +2,8 @@
 
 void C_EnemyBase::Init()
 {
+	Moveflg = true;
+
 	m_pos = { ScreenRight + Size, RandomApp()};
 
 	m_scaleMat = Math::Matrix::CreateScale(1, 1, 0);
@@ -11,6 +13,8 @@ void C_EnemyBase::Init()
 
 void C_EnemyBase::Update()
 {
+	if (!Moveflg)return;
+
 	m_pos.x += m_moveSpeed;
 
 	if (m_pos.x < ScreenLeft - Size)
@@ -25,6 +29,8 @@ void C_EnemyBase::Update()
 
 void C_EnemyBase::Draw2D()
 {
+	if (!Moveflg)return;
+
 	rect = { 0,0,64,64 };
 	//プレイヤーの描画
 	SHADER.m_spriteShader.SetMatrix(m_mat);//行列のセット
