@@ -25,5 +25,9 @@ private:
 	C_Player m_player;
 
 	KdTexture m_playerTex;		//プレイヤー画像
+
+	C_EnemyBase m_enemy;
+
+	KdTexture m_enemyTex;
 };
 

@@ -159,6 +159,9 @@
     <ClInclude Include="Src\Application\Player\Bullet.h">
       <Filter>Src\Application\Player</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Application\Enemy\EnemyBase.h">
+      <Filter>Src\Application\Enemy</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -235,6 +238,9 @@
     </ClCompile>
     <ClCompile Include="Src\Application\Player\Bullet.cpp">
       <Filter>Src\Application\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Enemy\EnemyBase.cpp">
+      <Filter>Src\Application\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

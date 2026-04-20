@@ -16,7 +16,7 @@ public:
 	void Draw2D();
 
 	//ランダムな位置に出現
-	int RandomApp();
+	float RandomApp();
 
 
 	void SetTex(KdTexture* tex) { m_Tex = tex; }
