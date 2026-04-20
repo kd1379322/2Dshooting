@@ -40,7 +40,6 @@ private:
 
 	bool Spacekeyflg;
 
-	int test = 0;
 
 	Scene() {}
 
