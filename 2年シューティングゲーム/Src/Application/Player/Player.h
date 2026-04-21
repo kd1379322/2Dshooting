@@ -19,6 +19,8 @@ public:
 	// GUI処理
 	void ImGuiUpdate();
 
+	Math::Vector2 Getpos() { return m_pos; }
+
 	void SetTex(KdTexture* tex) { m_PlayerTex = tex; }
 private:
 
@@ -33,8 +35,7 @@ private:
 	
 	bool Moveflg;					//行動用フラグ
 
-	bool Bulletkeyflg;			//弾発射キーフラグ
-	int BulletCnt;
+
 
 	int playerAlpha;
 	int Hp;						//HP
@@ -51,9 +52,7 @@ private:
 
 	Math::Rectangle rect;	//プレイヤー切り取り範囲
 
-	static const int MaxBullet = 10;
-	C_Bullet m_Bullet[MaxBullet];
-	KdTexture m_BulletTex;			//画像用	
+	
 
 };
 

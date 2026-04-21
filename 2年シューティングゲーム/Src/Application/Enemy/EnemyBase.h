@@ -18,6 +18,7 @@ public:
 	//ランダムな位置に出現
 	float RandomApp();
 
+	bool BulletHit(Math::Vector2 p_pos);
 
 	void SetTex(KdTexture* tex) { m_Tex = tex; }
 

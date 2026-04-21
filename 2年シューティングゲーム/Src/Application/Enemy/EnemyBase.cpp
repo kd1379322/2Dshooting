@@ -44,3 +44,24 @@ float C_EnemyBase::RandomApp()
     std::uniform_real_distribution<float> dist(ScreenBottom + Size, ScreenTop - Size);
     return dist(gen);
 }
+
+bool C_EnemyBase::BulletHit(Math::Vector2 p_pos)
+{
+	const float x = m_pos.x - p_pos.x;
+	const float y = m_pos.y - p_pos.y;
+	const float z = sqrt(x * x + y * y);
+
+	if (Moveflg)
+	{
+		if (z < 32)
+		{
+			Moveflg = false;
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+
+	}
+}

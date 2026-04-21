@@ -21,6 +21,10 @@ public:
 	void SetTex(KdTexture* tex) { m_tex = tex; }
 
 	bool GetMflg() { return Moveflg; }
+
+	Math::Vector2 Getpos() { return m_pos; }
+
+	void HitEnemy() { Moveflg = false; }
 private:
 
 	const float m_moveSpeed = 32.0f;	//移動速度

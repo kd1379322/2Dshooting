@@ -34,6 +34,7 @@ void C_Bullet::Draw2D()
 {
 	if (!Moveflg)return;
 
+
 	//プレイヤーの描画
 	SHADER.m_spriteShader.SetMatrix(m_mat);//行列のセット
 	SHADER.m_spriteShader.DrawTex(m_tex, rect, 1.0f);//画像の描画
