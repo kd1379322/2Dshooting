@@ -40,19 +40,7 @@ void Scene::Update()
 		break;
 	case GamePlay:
 		m_GamePlay.Update();
-		/*if (GetAsyncKeyState(VK_SPACE) & 0x8000)
-		{
-			if (!Spacekeyflg)
-			{
-				nowScene = Title;
-				m_GamePlay.Init();
-				Spacekeyflg = true;
-			}
-		}
-		else
-		{
-			Spacekeyflg = false;
-		}*/
+		
 		break;
 	case Result:
 		break;

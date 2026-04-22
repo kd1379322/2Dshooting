@@ -1,21 +1,20 @@
 #include "GamePlay.h"
-#include"Application/Player/Player.h"
-#include"Application/Player/Bullet.h"
-#include"Application/Enemy/EnemyBase.h"
+
 
 void C_GamePlay::Init()
 {
-	m_playerTex.Load("Texture/player->png");
-	m_player->SetTex(&m_playerTex);
+	
+	m_playerTex.Load("Texture/player.png");
+	m_player.SetTex(&m_playerTex);
 
-	m_enemyTex.Load("Texture/enemy->png");
-	m_enemy->SetTex(&m_enemyTex);
+	m_enemyTex.Load("Texture/enemy.png");
+	m_enemy.SetTex(&m_enemyTex);
 
-	m_BulletTex.Load("Texture/Bullet->png");
+	m_BulletTex.Load("Texture/Bullet.png");
 
 	for (int i = 0; i < MaxBullet; i++)
 	{
-		m_Bullet[i]->SetTex(&m_BulletTex);
+		m_Bullet[i].SetTex(&m_BulletTex);
 	}
 
 	GameCnt = 0;
@@ -23,19 +22,20 @@ void C_GamePlay::Init()
 	Bulletkeyflg = false;
 	BulletCnt = 0;
 
-	m_player->Init();
-	m_enemy->Init();
+	m_player.Init();
+	m_enemy.Init();
+	
 }
 
 void C_GamePlay::Update()
 {
 	GameCnt++;
-	m_player->Update();
-	m_enemy->Update();
+	m_player.Update();
+	m_enemy.Update();
 
 	for (int i = 0; i < MaxBullet; i++)
 	{
-		m_Bullet[i]->Update();
+		m_Bullet[i].Update();
 	}
 
 	if (GetAsyncKeyState(VK_SPACE) & 0x8000)
@@ -46,9 +46,9 @@ void C_GamePlay::Update()
 
 			for (int i = 0; i < MaxBullet; i++)
 			{
-				if (!m_Bullet[i]->GetMflg())
+				if (!m_Bullet[i].GetMflg())
 				{
-					m_Bullet[i]->Init(m_player->Getpos());
+					m_Bullet[i].Init(m_player.Getpos());
 					return;
 				}
 				else
@@ -72,22 +72,32 @@ void C_GamePlay::Update()
 
 	for (int i = 0; i < MaxBullet; i++)
 	{
-		if (m_enemy->BulletHit(m_Bullet[i]->Getpos()));
+		if (m_enemy.GetMflg() &&  m_Bullet[i].GetMflg() && m_enemy.BulletHit(m_Bullet[i].Getpos())) {
+			m_Bullet[i].HitEnemy();
+		}
 	}
 }
 
 void C_GamePlay::Draw2D()
 {
-	m_player->Draw2D();
-	m_enemy->Draw2D();
+	m_player.Draw2D();
+	m_enemy.Draw2D();
 	for (int i = 0; i < MaxBullet; i++)
 	{
-		m_Bullet[i]->Draw2D();
+		m_Bullet[i].Draw2D();
 	}
 }
 
 void C_GamePlay::ImGuiUpdate()
 {
 	ImGui::Text("GameC = %d", GameCnt);
-	m_player->ImGuiUpdate();
+	m_player.ImGuiUpdate();
+}
+
+void C_GamePlay::Release()
+{
+	m_playerTex.Release();
+	m_enemyTex.Release();
+	m_BulletTex.Release();
+	
 }

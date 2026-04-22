@@ -22,6 +22,8 @@ public:
 
 	void SetTex(KdTexture* tex) { m_Tex = tex; }
 
+	bool GetMflg() { return Moveflg; }
+
 protected:
 
 	const float m_moveSpeed = -8.0f;	//移動速度

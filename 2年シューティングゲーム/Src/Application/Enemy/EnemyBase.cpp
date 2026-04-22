@@ -13,7 +13,22 @@ void C_EnemyBase::Init()
 
 void C_EnemyBase::Update()
 {
-	if (!Moveflg)return;
+	if (!Moveflg)
+	{
+		/*static std::random_device rd;
+		static std::mt19937 gen(rd());
+		std::uniform_real_distribution<float> dist(0, 1);
+
+		if (dist(gen) == 1)
+		{*/
+			Moveflg = true;
+			m_pos = { ScreenRight + Size,  RandomApp() };
+		//}
+		//else
+		//{
+		//	return;
+		//}
+	}
 
 	m_pos.x += m_moveSpeed;
 
@@ -53,7 +68,7 @@ bool C_EnemyBase::BulletHit(Math::Vector2 p_pos)
 
 	if (Moveflg)
 	{
-		if (z < 32)
+		if (z < 64)
 		{
 			Moveflg = false;
 			return true;
