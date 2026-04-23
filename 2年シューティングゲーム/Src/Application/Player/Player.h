@@ -20,8 +20,12 @@ public:
 	void ImGuiUpdate();
 
 	Math::Vector2 Getpos() { return m_pos; }
+	
+	bool GetMflg() { return Moveflg; }
 
 	void SetTex(KdTexture* tex) { m_PlayerTex = tex; }
+
+	bool EnemyHit(Math::Vector2 p_pos);
 private:
 
 	const float m_moveSpeed = 16.0f;	//移動速度
@@ -31,15 +35,16 @@ private:
 	const float ScreenLeft = -640;	
 	const float ScreenRight = 640;	
 
-	const float PlayerSize = 64;	
+	const float PlayerSize = 32;	
 	
-	bool Moveflg;					//行動用フラグ
+	bool Moveflg = true;					//行動用フラグ
 
+	bool DamegeIframes = false;
+	int DamegeIframesCnt = 0;
 
-
-	int playerAlpha;
-	int Hp;						//HP
-	static const int MHp = 6;	//HPの最大値
+	float playerAlpha = 1.0f;
+	int Hp = MHp;						//HP
+	static const int MHp = 3;	//HPの最大値
 
 	KdTexture* m_PlayerTex;			//画像用	
 

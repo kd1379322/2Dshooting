@@ -8,7 +8,10 @@ void C_GamePlay::Init()
 	m_player.SetTex(&m_playerTex);
 
 	m_enemyTex.Load("Texture/enemy.png");
-	m_enemy.SetTex(&m_enemyTex);
+	for(int i= 0;i<MaxEnemy;i++)
+	{
+		m_enemy[i].SetTex(&m_enemyTex);
+	}
 
 	m_BulletTex.Load("Texture/Bullet.png");
 
@@ -17,28 +20,65 @@ void C_GamePlay::Init()
 		m_Bullet[i].SetTex(&m_BulletTex);
 	}
 
+	m_backgroundTex.Load("Texture/pixelart_starfield.png");
+
 	GameCnt = 0;
 
 	Bulletkeyflg = false;
 	BulletCnt = 0;
-
+	BulletColor = { 1,0,0,1 };
+	BulletColorNumber = 1;
 	m_player.Init();
-	m_enemy.Init();
+	
 	
 }
 
 void C_GamePlay::Update()
 {
 	GameCnt++;
-	m_player.Update();
-	m_enemy.Update();
 
+	static std::random_device rd;
+	static std::mt19937 gen(rd());
+	std::uniform_int_distribution<int> dist(0, 500);
+	
+	
+	for (int i = 0; i < MaxEnemy; i++)
+	{
+		if (dist(gen) == 0 && !m_enemy[i].GetMflg())
+		{
+			m_enemy[i].Init();
+		}
+	}
+	
+
+	m_player.Update();
+	for (int i = 0; i < MaxEnemy; i++)
+	{
+		m_enemy[i].Update();
+	}
 	for (int i = 0; i < MaxBullet; i++)
 	{
 		m_Bullet[i].Update();
 	}
 
-	if (GetAsyncKeyState(VK_SPACE) & 0x8000)
+	//弾の色を変更
+	if (GetAsyncKeyState('Z') & 0x8000) {
+		
+		BulletColorNumber = 1;
+	}
+
+	if (GetAsyncKeyState('X') & 0x8000) {
+		
+		BulletColorNumber = 2;
+	}
+
+	if (GetAsyncKeyState('C') & 0x8000) {
+		
+		BulletColorNumber = 3;
+	}
+
+	//弾発射処理
+	//if (GetAsyncKeyState(VK_SPACE) & 0x8000)
 	{
 		if (!Bulletkeyflg)
 		{
@@ -46,9 +86,9 @@ void C_GamePlay::Update()
 
 			for (int i = 0; i < MaxBullet; i++)
 			{
-				if (!m_Bullet[i].GetMflg())
+				if (!m_Bullet[i].GetMflg() && m_player.GetMflg())
 				{
-					m_Bullet[i].Init(m_player.Getpos());
+					m_Bullet[i].Init(m_player.Getpos(),BulletColorNumber);
 					return;
 				}
 				else
@@ -59,6 +99,7 @@ void C_GamePlay::Update()
 		}
 	}
 
+	//弾発射間隔用
 	if (Bulletkeyflg)
 	{
 		BulletCnt++;
@@ -69,23 +110,56 @@ void C_GamePlay::Update()
 		}
 	}
 
-
-	for (int i = 0; i < MaxBullet; i++)
+	
+	for (int j = 0; j < MaxEnemy; j++)
 	{
-		if (m_enemy.GetMflg() &&  m_Bullet[i].GetMflg() && m_enemy.BulletHit(m_Bullet[i].Getpos())) {
-			m_Bullet[i].HitEnemy();
+		//敵と弾の当たり判定
+		for (int i = 0; i < MaxBullet; i++)
+		{
+			if (m_enemy[j].GetMflg() && m_Bullet[i].GetMflg() && m_enemy[j].BulletHit(m_Bullet[i].Getpos())) {
+				m_Bullet[i].HitEnemy();
+				m_enemy[j].CheckColor(BulletColorNumber, j);
+			}
+		}
+
+		//敵と自機の当たり判定
+		if (m_enemy[j].GetMflg() && m_player.EnemyHit(m_enemy[j].Getpos()))
+		{
+
 		}
 	}
+
+	Backgroundpos.x -= 8;
+	if (Backgroundpos.x < -640)
+	{
+		Backgroundpos.x = 640;
+	}
+
+	m_scaleMat = Math::Matrix::CreateScale(1, 1, 0);
+	m_transMat = Math::Matrix::CreateTranslation(Backgroundpos.x, Backgroundpos.y, 0);
+	m_mat = m_scaleMat * m_transMat;
 }
 
 void C_GamePlay::Draw2D()
 {
-	m_player.Draw2D();
-	m_enemy.Draw2D();
+
+	Math::Rectangle rect = { 0,0,1280*2,720 };
+	SHADER.m_spriteShader.SetMatrix(m_mat);//行列のセット
+	SHADER.m_spriteShader.DrawTex(&m_backgroundTex, rect, 1.0f);//画像の描画
+
 	for (int i = 0; i < MaxBullet; i++)
 	{
 		m_Bullet[i].Draw2D();
 	}
+
+	m_player.Draw2D();
+
+	for (int i = 0; i < MaxEnemy; i++)
+	{
+		m_enemy[i].Draw2D(i);
+	}
+	
+
 }
 
 void C_GamePlay::ImGuiUpdate()

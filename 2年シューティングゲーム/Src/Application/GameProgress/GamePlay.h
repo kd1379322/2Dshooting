@@ -26,17 +26,31 @@ private:
 
 	void Release();		// 解放処理
 
+
+	KdTexture m_backgroundTex;
+
 	int GameCnt;
 	C_Player m_player;
 	KdTexture m_playerTex;		//プレイヤー画像
 
-	C_EnemyBase m_enemy;
+	static const int MaxEnemy = 18;
+	C_EnemyBase m_enemy[MaxEnemy];
+
 	KdTexture m_enemyTex;
+
+	Math::Matrix m_transMat;	//移動行列
+	Math::Matrix m_scaleMat;	//拡大行列
+	Math::Matrix m_rotationMat;	//回転行列
+	Math::Matrix m_mat;			//行列
 
 	static const int MaxBullet = 10;
 	C_Bullet m_Bullet[MaxBullet];
 	KdTexture m_BulletTex;			//画像用	
 	bool Bulletkeyflg;			//弾発射キーフラグ
 	int BulletCnt;
+	Math::Color BulletColor;
+	int BulletColorNumber;
+
+	Math::Vector2 Backgroundpos = { 0,0 };
 };
 

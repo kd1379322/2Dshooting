@@ -6,17 +6,18 @@ void C_Player::Init()
 	playerAlpha = 1.0f;
 	Hp = MHp;
 	m_pos = { -300,0 };
-	rect = { 0,0,64,64 };
+	
 
 
 	m_transMat = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
-	m_scaleMat = Math::Matrix::CreateScale(2, 2, 0);
-	m_rotationMat = Math::Matrix::CreateRotationZ(DirectX::XMConvertToRadians(270));
+	m_scaleMat = Math::Matrix::CreateScale(1, 1, 0);
+	m_rotationMat = Math::Matrix::CreateRotationZ(DirectX::XMConvertToRadians(0));
 	m_mat = m_scaleMat * m_rotationMat * m_transMat;
 }
 
 void C_Player::Update()
 {
+	if (!Moveflg)return;
 
 	if (GetAsyncKeyState(VK_LEFT) & 0x8000)
 	{
@@ -47,16 +48,29 @@ void C_Player::Update()
 		}
 	}
 	
+	if (DamegeIframes)
+	{
+		DamegeIframesCnt++;
+		playerAlpha = 0.3f;
+		if (DamegeIframesCnt >= 120)
+		{
+			playerAlpha = 1.0f;
+			DamegeIframesCnt = 0;
+			DamegeIframes = false;
+		}
+	}
 
 	m_transMat = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
-	m_scaleMat = Math::Matrix::CreateScale(2, 2, 0);
-	m_rotationMat = Math::Matrix::CreateRotationZ(DirectX::XMConvertToRadians(270));
+	m_scaleMat = Math::Matrix::CreateScale(1, 1, 0);
+	m_rotationMat = Math::Matrix::CreateRotationZ(DirectX::XMConvertToRadians(0));
 	m_mat = m_scaleMat * m_rotationMat * m_transMat;
 }
 
 void C_Player::Draw2D()
 {
+	if (!Moveflg)return;
 
+	rect = { 0,0,64,64 };
 
 	//プレイヤーの描画
 	SHADER.m_spriteShader.SetMatrix(m_mat);//行列のセット
@@ -66,7 +80,31 @@ void C_Player::Draw2D()
 
 void C_Player::ImGuiUpdate()
 {
-	//ImGui::Text("x = %f", m_pos.x);
-	//ImGui::Text("y = %f", m_pos.y);
+	ImGui::Text("x = %f", m_pos.x);
+	ImGui::Text("y = %f", m_pos.y);
+	ImGui::Text("Hp = %d", Hp);
 
+}
+
+bool C_Player::EnemyHit(Math::Vector2 p_pos)
+{
+	const float x = m_pos.x - p_pos.x;
+	const float y = m_pos.y - p_pos.y;
+	const float z = sqrt(x * x + y * y);
+
+	if (Moveflg)
+	{
+		if (z < 64 && !DamegeIframes)
+		{
+			Hp -= 1;
+			DamegeIframes = true;
+			if (Hp == 0)Moveflg = false;
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+
+	}
 }

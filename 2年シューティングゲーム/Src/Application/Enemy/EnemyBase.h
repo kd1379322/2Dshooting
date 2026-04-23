@@ -13,7 +13,7 @@ public:
 	void Update();
 
 	// 描画処理
-	void Draw2D();
+	void Draw2D(int i);
 
 	//ランダムな位置に出現
 	float RandomApp();
@@ -24,9 +24,13 @@ public:
 
 	bool GetMflg() { return Moveflg; }
 
+	void CheckColor(int i,int j);
+
+	Math::Vector2 Getpos() { return m_pos; }
+
 protected:
 
-	const float m_moveSpeed = -8.0f;	//移動速度
+	const float m_moveSpeed = -4.0f;	//移動速度
 
 	const float ScreenTop = 360;
 	const float ScreenBottom = -360;
@@ -35,7 +39,9 @@ protected:
 
 	const float Size = 64;
 
-	bool Moveflg;					//行動用フラグ
+	bool Moveflg = false;					//行動用フラグ
+
+	int anm;
 
 	KdTexture* m_Tex;			//画像用	
 

@@ -7,7 +7,7 @@ public:
 	~C_Bullet(){}
 
 	// 初期設定
-	void Init(Math::Vector2 p_pos);
+	void Init(Math::Vector2 p_pos,int p_bcn);
 
 	// 更新処理
 	void Update();
@@ -48,6 +48,8 @@ private:
 	Math::Matrix m_mat;			//プレイヤー行列
 
 	Math::Rectangle rect;	//プレイヤー切り取り範囲
+
+	Math::Color color;
 
 };
 
