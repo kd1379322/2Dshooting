@@ -36,6 +36,9 @@ private:
 	static const int MaxEnemy = 18;
 	C_EnemyBase m_enemy[MaxEnemy];
 
+	static const int MaxcloneEnemy = 9;
+	C_EnemyBase m_cloneEnemy[MaxcloneEnemy];
+
 	KdTexture m_enemyTex;
 
 	Math::Matrix m_transMat;	//移動行列

@@ -8,6 +8,7 @@ public:
 
 	// 初期設定
 	void Init();
+	void PosInit(Math::Vector2 p_pos);
 
 	// 更新処理
 	void Update();
@@ -24,7 +25,7 @@ public:
 
 	bool GetMflg() { return Moveflg; }
 
-	void CheckColor(int i,int j);
+	int CheckColor(int i,int j);
 
 	Math::Vector2 Getpos() { return m_pos; }
 

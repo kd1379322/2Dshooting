@@ -14,7 +14,7 @@ public:
 	void Update();
 
 	// 描画処理
-	void Draw2D();
+	void Draw2D(int i);
 
 	// GUI処理
 	void ImGuiUpdate();

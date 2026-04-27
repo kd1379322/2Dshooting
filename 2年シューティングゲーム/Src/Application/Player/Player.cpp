@@ -7,8 +7,6 @@ void C_Player::Init()
 	Hp = MHp;
 	m_pos = { -300,0 };
 	
-
-
 	m_transMat = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
 	m_scaleMat = Math::Matrix::CreateScale(1, 1, 0);
 	m_rotationMat = Math::Matrix::CreateRotationZ(DirectX::XMConvertToRadians(0));
@@ -26,21 +24,24 @@ void C_Player::Update()
 			m_pos.x -= m_moveSpeed;
 		}
 	}
-	else if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
+	
+	if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
 	{
 		if (m_pos.x < ScreenRight - PlayerSize)
 		{
 			m_pos.x += m_moveSpeed;
 		}
 	}
-	else if (GetAsyncKeyState(VK_UP) & 0x8000)
+	
+	if (GetAsyncKeyState(VK_UP) & 0x8000)
 	{
 		if (m_pos.y < ScreenTop - PlayerSize)
 		{
 			m_pos.y += m_moveSpeed;
 		}
 	}
-	else if (GetAsyncKeyState(VK_DOWN) & 0x8000)
+	
+	if (GetAsyncKeyState(VK_DOWN) & 0x8000)
 	{
 		if (m_pos.y > ScreenBottom + PlayerSize)
 		{
@@ -60,17 +61,34 @@ void C_Player::Update()
 		}
 	}
 
+	
+
 	m_transMat = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
 	m_scaleMat = Math::Matrix::CreateScale(1, 1, 0);
 	m_rotationMat = Math::Matrix::CreateRotationZ(DirectX::XMConvertToRadians(0));
 	m_mat = m_scaleMat * m_rotationMat * m_transMat;
 }
 
-void C_Player::Draw2D()
+void C_Player::Draw2D(int i)
 {
 	if (!Moveflg)return;
 
-	rect = { 0,0,64,64 };
+	switch (i)
+	{
+	case 1:
+		rect = { 0, 0, 64, 64 };
+		break;
+	case 2:
+		rect = { 64,0,64,64 };
+		break;
+	case 3:
+		rect = { 128,0,64,64 };
+		break;
+	default:
+		rect = { 0,0,64,64 };
+		break;
+	}
+	
 
 	//プレイヤーの描画
 	SHADER.m_spriteShader.SetMatrix(m_mat);//行列のセット

@@ -52,6 +52,9 @@
     <Filter Include="Src\Application\Enemy">
       <UniqueIdentifier>{700a7145-23ce-4f36-8173-f33dd1bae5d7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Application\Efect">
+      <UniqueIdentifier>{2423008d-63bf-4e99-8816-4ed9a4c331ea}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Pch.h">
@@ -162,6 +165,9 @@
     <ClInclude Include="Src\Application\Enemy\EnemyBase.h">
       <Filter>Src\Application\Enemy</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Application\Efect\pcc.h">
+      <Filter>Src\Application\Efect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -241,6 +247,9 @@
     </ClCompile>
     <ClCompile Include="Src\Application\Enemy\EnemyBase.cpp">
       <Filter>Src\Application\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Efect\pcc.cpp">
+      <Filter>Src\Application\Efect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
