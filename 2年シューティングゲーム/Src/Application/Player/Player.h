@@ -1,5 +1,4 @@
 #pragma once
-#include "Bullet.h"
 
 class C_Player
 {
@@ -57,7 +56,6 @@ private:
 
 	Math::Rectangle rect;	//プレイヤー切り取り範囲
 
-	
 
 };
 

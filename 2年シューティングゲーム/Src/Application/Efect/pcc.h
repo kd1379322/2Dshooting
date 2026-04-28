@@ -7,7 +7,7 @@ public:
 	~C_pcc() { Release(); }
 
 	// 初期設定
-	void Init(Math::Vector2 p_pos);
+	void Init();
 
 	// 更新処理
 	void Update();
@@ -15,10 +15,13 @@ public:
 	// 描画処理
 	void Draw2D(int a);
 
+	//出現処理
+	void App(Math::Vector2 p_pos);
+
 private:
 	void Release();		// 解放処理
 
-	bool Moveflg = false;
+	bool Moveflg;
 
 	float alpha;
 

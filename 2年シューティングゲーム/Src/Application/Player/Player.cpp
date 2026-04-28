@@ -1,5 +1,6 @@
 #include "Player.h"
 
+
 void C_Player::Init()
 {
 	Moveflg = true;
@@ -16,39 +17,34 @@ void C_Player::Init()
 void C_Player::Update()
 {
 	if (!Moveflg)return;
+	float x = 0.0f;
+	float y = 0.0f;
 
-	if (GetAsyncKeyState(VK_LEFT) & 0x8000)
+	// 入力取得
+	if (GetAsyncKeyState(VK_LEFT) & 0x8000)  x -= 1.0f;
+	if (GetAsyncKeyState(VK_RIGHT) & 0x8000) x += 1.0f;
+	if (GetAsyncKeyState(VK_UP) & 0x8000)    y += 1.0f;
+	if (GetAsyncKeyState(VK_DOWN) & 0x8000)  y -= 1.0f;
+
+	// 長さを計算
+	float length = sqrtf(x * x + y * y);
+
+	// 正規化（斜めのときだけ効く）
+	if (length > 0.0f)
 	{
-		if (m_pos.x > ScreenLeft + PlayerSize)
-		{
-			m_pos.x -= m_moveSpeed;
-		}
+		x /= length;
+		y /= length;
 	}
+
+	// 移動
+	m_pos.x += x * m_moveSpeed;
+	m_pos.y += y * m_moveSpeed;
 	
-	if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
-	{
-		if (m_pos.x < ScreenRight - PlayerSize)
-		{
-			m_pos.x += m_moveSpeed;
-		}
-	}
-	
-	if (GetAsyncKeyState(VK_UP) & 0x8000)
-	{
-		if (m_pos.y < ScreenTop - PlayerSize)
-		{
-			m_pos.y += m_moveSpeed;
-		}
-	}
-	
-	if (GetAsyncKeyState(VK_DOWN) & 0x8000)
-	{
-		if (m_pos.y > ScreenBottom + PlayerSize)
-		{
-			m_pos.y -= m_moveSpeed;
-		}
-	}
-	
+	if (m_pos.x < ScreenLeft + PlayerSize)  m_pos.x = ScreenLeft + PlayerSize;
+	if (m_pos.x > ScreenRight - PlayerSize) m_pos.x = ScreenRight - PlayerSize;
+	if (m_pos.y > ScreenTop - PlayerSize)   m_pos.y = ScreenTop - PlayerSize;
+	if (m_pos.y < ScreenBottom + PlayerSize)m_pos.y = ScreenBottom + PlayerSize;
+
 	if (DamegeIframes)
 	{
 		DamegeIframesCnt++;

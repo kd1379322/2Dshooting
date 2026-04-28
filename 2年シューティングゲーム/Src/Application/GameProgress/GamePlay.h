@@ -4,6 +4,8 @@
 #include"Application/Player/Bullet.h"
 #include"Application/Enemy/EnemyBase.h"
 
+class C_pcc;
+
 class C_GamePlay
 {
 public:
@@ -55,5 +57,7 @@ private:
 	int BulletColorNumber;
 
 	Math::Vector2 Backgroundpos = { 0,0 };
+
+	std::shared_ptr<C_pcc> m_pcc = nullptr;
 };
 
