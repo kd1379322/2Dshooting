@@ -22,7 +22,7 @@ public:
 	
 	bool GetMflg() { return Moveflg; }
 
-	void SetTex(KdTexture* tex) { m_PlayerTex = tex; }
+	//void SetTex(KdTexture* tex) { m_PlayerTex = tex; }
 
 	bool EnemyHit(Math::Vector2 p_pos);
 private:
@@ -45,7 +45,7 @@ private:
 	int Hp = MHp;						//HP
 	static const int MHp = 3;	//HPの最大値
 
-	KdTexture* m_PlayerTex;			//画像用	
+	KdTexture m_Tex;			//画像用	
 
 	Math::Vector2 m_pos;		//座標
 

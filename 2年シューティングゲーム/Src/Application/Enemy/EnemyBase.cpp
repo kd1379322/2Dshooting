@@ -2,6 +2,15 @@
 
 void C_EnemyBase::Init()
 {
+	m_Tex.Load("Texture/enemy.png");
+
+	m_scaleMat = Math::Matrix::CreateScale(1, 1, 0);
+	m_transMat = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
+	m_mat = m_scaleMat * m_transMat;
+}
+
+void C_EnemyBase::App()
+{
 	Moveflg = true;
 
 	m_pos = { ScreenRight + Size, RandomApp() };
@@ -12,9 +21,10 @@ void C_EnemyBase::Init()
 	m_scaleMat = Math::Matrix::CreateScale(1, 1, 0);
 	m_transMat = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
 	m_mat = m_scaleMat * m_transMat;
+	
 }
 
-void C_EnemyBase::PosInit(Math::Vector2 p_pos)
+void C_EnemyBase::PosApp(Math::Vector2 p_pos)
 {
 	Moveflg = true;
 
@@ -26,6 +36,7 @@ void C_EnemyBase::PosInit(Math::Vector2 p_pos)
 	m_scaleMat = Math::Matrix::CreateScale(1, 1, 0);
 	m_transMat = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
 	m_mat = m_scaleMat * m_transMat;
+
 }
 
 void C_EnemyBase::Update()
@@ -89,7 +100,7 @@ void C_EnemyBase::Draw2D(int i)
 
 	//プレイヤーの描画
 	SHADER.m_spriteShader.SetMatrix(m_mat);//行列のセット
-	SHADER.m_spriteShader.DrawTex_Color(m_Tex, rect, color);//画像の描画
+	SHADER.m_spriteShader.DrawTex_Color(&m_Tex, rect, color);//画像の描画
 }
 
 float C_EnemyBase::RandomApp()

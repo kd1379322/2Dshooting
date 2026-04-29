@@ -4,10 +4,12 @@ class C_Bullet
 {
 public:
 	C_Bullet(){}
-	~C_Bullet(){}
+	~C_Bullet() { Release(); }
 
 	// 初期設定
-	void Init(Math::Vector2 p_pos,int p_bcn);
+	void Init();
+
+	void App(Math::Vector2 p_pos,int p_bcn);
 
 	// 更新処理
 	void Update();
@@ -18,7 +20,6 @@ public:
 	// GUI処理
 	void ImGuiUpdate();
 
-	void SetTex(KdTexture* tex) { m_tex = tex; }
 
 	bool GetMflg() { return Moveflg; }
 
@@ -26,6 +27,9 @@ public:
 
 	void HitEnemy() { Moveflg = false; }
 private:
+
+	// 解放
+	void Release();
 
 	const float m_moveSpeed = 32.0f;	//移動速度
 
@@ -38,7 +42,7 @@ private:
 
 	bool Moveflg;					//行動用フラグ
 
-	KdTexture* m_tex;			//画像用	
+	KdTexture m_Tex;			//画像用	
 
 	Math::Vector2 m_pos;		//座標
 

@@ -1,8 +1,14 @@
 #pragma once
 
-#include"Application/Player/Player.h"
-#include"Application/Player/Bullet.h"
-#include"Application/Enemy/EnemyBase.h"
+//==============================
+//　前方宣言
+//==============================
+
+class C_Player;
+
+class C_Bullet;
+
+class C_EnemyBase;
 
 class C_pcc;
 
@@ -32,14 +38,17 @@ private:
 	KdTexture m_backgroundTex;
 
 	int GameCnt;
-	C_Player m_player;
+	std::shared_ptr<C_Player> m_player = nullptr;
+
 	KdTexture m_playerTex;		//プレイヤー画像
 
 	static const int MaxEnemy = 18;
-	C_EnemyBase m_enemy[MaxEnemy];
+	std::shared_ptr<C_EnemyBase> m_enemy[MaxEnemy];
+
 
 	static const int MaxcloneEnemy = 9;
-	C_EnemyBase m_cloneEnemy[MaxcloneEnemy];
+	std::shared_ptr<C_EnemyBase> m_cloneEnemy[MaxcloneEnemy];
+
 
 	KdTexture m_enemyTex;
 
@@ -49,7 +58,8 @@ private:
 	Math::Matrix m_mat;			//行列
 
 	static const int MaxBullet = 10;
-	C_Bullet m_Bullet[MaxBullet];
+	std::shared_ptr<C_Bullet> m_Bullet[MaxBullet];
+
 	KdTexture m_BulletTex;			//画像用	
 	bool Bulletkeyflg;			//弾発射キーフラグ
 	int BulletCnt;

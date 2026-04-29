@@ -1,6 +1,9 @@
 #pragma once
-#include "GameProgress/Title.h"
-#include "GameProgress/GamePlay.h"
+
+
+class C_Title;
+
+class C_GamePlay;
 
 enum SceneType
 {
@@ -16,8 +19,8 @@ private:
 	//ƒV[ƒ“ŠÇ——p•Ï”
 	SceneType nowScene;
 
-	C_Title m_Title;
-	C_GamePlay m_GamePlay;
+	std::shared_ptr<C_Title> m_Title;
+	std::shared_ptr <C_GamePlay> m_GamePlay;
 
 public:
 

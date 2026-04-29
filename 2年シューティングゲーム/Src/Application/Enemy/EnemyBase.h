@@ -8,7 +8,12 @@ public:
 
 	// 初期設定
 	void Init();
-	void PosInit(Math::Vector2 p_pos);
+
+
+
+	//出現処理
+	void App();
+	void PosApp(Math::Vector2 p_pos);
 
 	// 更新処理
 	void Update();
@@ -21,7 +26,6 @@ public:
 
 	bool BulletHit(Math::Vector2 p_pos);
 
-	void SetTex(KdTexture* tex) { m_Tex = tex; }
 
 	bool GetMflg() { return Moveflg; }
 
@@ -40,11 +44,11 @@ protected:
 
 	const float Size = 64;
 
-	bool Moveflg = false;					//行動用フラグ
+	bool Moveflg = false;		//行動用フラグ
 
-	int anm;
+	int anm = 0;
 
-	KdTexture* m_Tex;			//画像用	
+	KdTexture m_Tex;			//画像用	
 
 	Math::Vector2 m_pos;		//座標
 

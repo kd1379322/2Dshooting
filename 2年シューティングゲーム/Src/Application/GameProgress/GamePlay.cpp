@@ -1,26 +1,11 @@
 #include "GamePlay.h"
 #include "../Efect/pcc.h"
+#include"../Player/Player.h"
+#include"../Enemy/EnemyBase.h"
+#include"../Player/Bullet.h"
 
 void C_GamePlay::Init()
 {
-	m_playerTex.Load("Texture/player.png");
-	m_player.SetTex(&m_playerTex);
-
-	m_enemyTex.Load("Texture/enemy.png");
-	for (int i = 0; i < MaxEnemy; i++)
-	{
-		m_enemy[i].SetTex(&m_enemyTex);
-	}
-	for (int i = 0; i < MaxcloneEnemy; i++)
-	{
-		m_cloneEnemy[i].SetTex(&m_enemyTex);
-	}
-
-	m_BulletTex.Load("Texture/Bullet.png");
-	for (int i = 0; i < MaxBullet; i++)
-	{
-		m_Bullet[i].SetTex(&m_BulletTex);
-	}
 
 	m_backgroundTex.Load("Texture/pixelart_starfield.png");
 
@@ -29,7 +14,26 @@ void C_GamePlay::Init()
 	BulletCnt = 0;
 	BulletColorNumber = 1;
 
-	m_player.Init();
+	m_player = std::make_shared<C_Player>();
+	m_player->Init();
+
+	for(int i = 0;i<MaxEnemy;i++)
+	{
+		m_enemy[i] = std::make_shared<C_EnemyBase>();
+		m_enemy[i]->Init();
+	}
+
+	for (int i = 0; i < MaxcloneEnemy; i++)
+	{
+		m_cloneEnemy[i] = std::make_shared<C_EnemyBase>();
+		m_cloneEnemy[i]->Init();
+	}
+
+	for (int i = 0; i < MaxBullet; i++)
+	{
+		m_Bullet[i] = std::make_shared<C_Bullet>();
+		m_Bullet[i]->Init();
+	}
 
 	m_pcc = std::make_shared<C_pcc>();
 	m_pcc->Init();
@@ -51,20 +55,20 @@ void C_GamePlay::Update()
 	//==============================
 	for (int i = 0; i < MaxEnemy; i++)
 	{
-		if (dist(gen) == 0 && !m_enemy[i].GetMflg())
+		if (dist(gen) == 0 && !m_enemy[i]->GetMflg())
 		{
-			m_enemy[i].Init();
+			m_enemy[i]->App();
 		}
 	}
 
 	//==============================
 	// 更新
 	//==============================
-	m_player.Update();
+	m_player->Update();
 
-	for (int i = 0; i < MaxEnemy; i++) m_enemy[i].Update();
-	for (int i = 0; i < MaxcloneEnemy; i++) m_cloneEnemy[i].Update();
-	for (int i = 0; i < MaxBullet; i++) m_Bullet[i].Update();
+	for (int i = 0; i < MaxEnemy; i++) m_enemy[i]->Update();
+	for (int i = 0; i < MaxcloneEnemy; i++) m_cloneEnemy[i]->Update();
+	for (int i = 0; i < MaxBullet; i++) m_Bullet[i]->Update();
 
 	//==============================
 	// 弾の色変更
@@ -74,7 +78,7 @@ void C_GamePlay::Update()
 		//if (BulletColorNumber != 1)
 		{
 			BulletColorNumber = 1;
-			m_pcc->App(m_player.Getpos());
+			m_pcc->App(m_player->Getpos());
 		}
 	}
 
@@ -83,7 +87,7 @@ void C_GamePlay::Update()
 		//if (BulletColorNumber != 2)
 		{
 			BulletColorNumber = 2;
-			m_pcc->App(m_player.Getpos());
+			m_pcc->App(m_player->Getpos());
 		}
 	}
 
@@ -92,7 +96,7 @@ void C_GamePlay::Update()
 		//if (BulletColorNumber != 3)
 		{
 			BulletColorNumber = 3;
-			m_pcc->App(m_player.Getpos());
+			m_pcc->App(m_player->Getpos());
 		}
 	}
 
@@ -107,9 +111,9 @@ void C_GamePlay::Update()
 
 			for (int i = 0; i < MaxBullet; i++)
 			{
-				if (!m_Bullet[i].GetMflg() && m_player.GetMflg())
+				if (!m_Bullet[i]->GetMflg() && m_player->GetMflg())
 				{
-					m_Bullet[i].Init(m_player.Getpos(), BulletColorNumber);
+					m_Bullet[i]->App(m_player->Getpos(), BulletColorNumber);
 					break; // ← return禁止
 				}
 			}
@@ -134,26 +138,30 @@ void C_GamePlay::Update()
 		//敵と弾の当たり判定 
 		for (int i = 0; i < MaxBullet; i++)
 		{
-			if (m_enemy[j].GetMflg() && m_Bullet[i].GetMflg() && m_enemy[j].BulletHit(m_Bullet[i].Getpos()))
+			if (m_enemy[j]->GetMflg() && m_Bullet[i]->GetMflg() && m_enemy[j]->BulletHit(m_Bullet[i]->Getpos()))
 			{
-				m_Bullet[i].HitEnemy();
-				if (m_enemy[j].CheckColor(BulletColorNumber, j) == 1)
+				m_Bullet[i]->HitEnemy();
+				if (m_enemy[j]->CheckColor(BulletColorNumber, j) == 1)
 				{
 					for (int k = 0; k < 3; k++) {
-						if (!m_cloneEnemy[k].GetMflg())
+						if (!m_cloneEnemy[k]->GetMflg())
 						{
-							m_cloneEnemy[k].PosInit(m_enemy[j].Getpos()); return;
+							m_cloneEnemy[k]->PosApp(m_enemy[j]->Getpos()); 
+							return;
 						}
-						else { continue; }
+						else 
+						{
+							continue;
+						}
 					}
 				}
-				else if (m_enemy[j].CheckColor(BulletColorNumber, j) == 2)
+				else if (m_enemy[j]->CheckColor(BulletColorNumber, j) == 2)
 				{
 					for (int k = 3; k < 6; k++)
 					{
-						if (!m_cloneEnemy[k].GetMflg())
+						if (!m_cloneEnemy[k]->GetMflg())
 						{
-							m_cloneEnemy[k].PosInit(m_enemy[j].Getpos());
+							m_cloneEnemy[k]->PosApp(m_enemy[j]->Getpos());
 							return;
 						}
 						else
@@ -162,13 +170,13 @@ void C_GamePlay::Update()
 						}
 					}
 				}
-				else if (m_enemy[j].CheckColor(BulletColorNumber, j) == 3)
+				else if (m_enemy[j]->CheckColor(BulletColorNumber, j) == 3)
 				{
 					for (int k = 6; k < 9; k++)
 					{
-						if (!m_cloneEnemy[k].GetMflg())
+						if (!m_cloneEnemy[k]->GetMflg())
 						{
-							m_cloneEnemy[k].PosInit(m_enemy[j].Getpos());
+							m_cloneEnemy[k]->PosApp(m_enemy[j]->Getpos());
 							return;
 						}
 						else
@@ -180,7 +188,7 @@ void C_GamePlay::Update()
 			}
 
 			//敵と自機の当たり判定
-			if (m_enemy[j].GetMflg() && m_player.EnemyHit(m_enemy[j].Getpos()))
+			if (m_enemy[j]->GetMflg() && m_player->EnemyHit(m_enemy[j]->Getpos()))
 			{
 			}
 
@@ -193,22 +201,20 @@ void C_GamePlay::Update()
 	{
 		for (int i = 0; i < MaxBullet; i++)
 		{
-			if (m_cloneEnemy[j].GetMflg() &&
-				m_Bullet[i].GetMflg() &&
-				m_cloneEnemy[j].BulletHit(m_Bullet[i].Getpos()))
+			if (m_cloneEnemy[j]->GetMflg() && m_Bullet[i]->GetMflg() && m_cloneEnemy[j]->BulletHit(m_Bullet[i]->Getpos()))
 			{
-				m_Bullet[i].HitEnemy();
+				m_Bullet[i]->HitEnemy();
 
-				if (m_cloneEnemy[j].CheckColor(BulletColorNumber, j) == 0);
+				if (m_cloneEnemy[j]->CheckColor(BulletColorNumber, j) == 0);
 			}
 		}
 
 		// 敵と自機の当たり判定
-		if (m_cloneEnemy[j].GetMflg() &&
-			m_player.EnemyHit(m_cloneEnemy[j].Getpos()))
-		{
-		}
+		if (m_cloneEnemy[j]->GetMflg() && m_player->EnemyHit(m_cloneEnemy[j]->Getpos()));
+		
 	}
+
+
 	//==============================
 	// 背景
 	//==============================
@@ -242,22 +248,22 @@ void C_GamePlay::Draw2D()
 	// 弾描画
 	for (int i = 0; i < MaxBullet; i++)
 	{
-		m_Bullet[i].Draw2D();
+		m_Bullet[i]->Draw2D();
 	}
 
 	// プレイヤー描画
-	m_player.Draw2D(BulletColorNumber);
+	m_player->Draw2D(BulletColorNumber);
 
 	// 敵描画
 	for (int i = 0; i < MaxEnemy; i++)
 	{
-		m_enemy[i].Draw2D(i);
+		m_enemy[i]->Draw2D(i);
 	}
 
 	// クローン敵描画
 	for (int i = 0; i < MaxcloneEnemy; i++)
 	{
-		m_cloneEnemy[i].Draw2D(i);
+		m_cloneEnemy[i]->Draw2D(i);
 	}
 
 	m_pcc->Draw2D(BulletColorNumber);
@@ -267,14 +273,12 @@ void C_GamePlay::Draw2D()
 void C_GamePlay::ImGuiUpdate()
 {
 	ImGui::Text("GameC = %d", GameCnt);
-	m_player.ImGuiUpdate();
+	m_player->ImGuiUpdate();
 }
 
 void C_GamePlay::Release()
 {
 	m_playerTex.Release();
 	m_enemyTex.Release();
-	m_BulletTex.Release();
-
-	
+	m_BulletTex.Release();	
 }

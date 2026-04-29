@@ -3,15 +3,17 @@
 
 void C_Player::Init()
 {
+	m_Tex.Load("Texture/player.png");
+
 	Moveflg = true;
 	playerAlpha = 1.0f;
 	Hp = MHp;
 	m_pos = { -300,0 };
 	
-	m_transMat = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
-	m_scaleMat = Math::Matrix::CreateScale(1, 1, 0);
-	m_rotationMat = Math::Matrix::CreateRotationZ(DirectX::XMConvertToRadians(0));
-	m_mat = m_scaleMat * m_rotationMat * m_transMat;
+	m_transMat		= Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
+	m_scaleMat		= Math::Matrix::CreateScale(1, 1, 0);
+	m_rotationMat	= Math::Matrix::CreateRotationZ(DirectX::XMConvertToRadians(0));
+	m_mat			= m_scaleMat * m_rotationMat * m_transMat;
 }
 
 void C_Player::Update()
@@ -59,10 +61,10 @@ void C_Player::Update()
 
 	
 
-	m_transMat = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
-	m_scaleMat = Math::Matrix::CreateScale(1, 1, 0);
-	m_rotationMat = Math::Matrix::CreateRotationZ(DirectX::XMConvertToRadians(0));
-	m_mat = m_scaleMat * m_rotationMat * m_transMat;
+	m_transMat		= Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
+	m_scaleMat		= Math::Matrix::CreateScale(1, 1, 0);
+	m_rotationMat	= Math::Matrix::CreateRotationZ(DirectX::XMConvertToRadians(0));
+	m_mat			= m_scaleMat * m_rotationMat * m_transMat;
 }
 
 void C_Player::Draw2D(int i)
@@ -88,15 +90,15 @@ void C_Player::Draw2D(int i)
 
 	//プレイヤーの描画
 	SHADER.m_spriteShader.SetMatrix(m_mat);//行列のセット
-	SHADER.m_spriteShader.DrawTex(m_PlayerTex, rect, playerAlpha);//画像の描画
+	SHADER.m_spriteShader.DrawTex(&m_Tex, rect, playerAlpha);//画像の描画
 
 }
 
 void C_Player::ImGuiUpdate()
 {
-	ImGui::Text("x = %f", m_pos.x);
+	/*ImGui::Text("x = %f", m_pos.x);
 	ImGui::Text("y = %f", m_pos.y);
-	ImGui::Text("Hp = %d", Hp);
+	ImGui::Text("Hp = %d", Hp);*/
 
 }
 
