@@ -169,6 +169,7 @@
     <ClInclude Include="Src\Application\Enemy\Red.h" />
     <ClInclude Include="Src\Application\Enemy\yellow.h" />
     <ClInclude Include="Src\Application\GameProgress\GamePlay.h" />
+    <ClInclude Include="Src\Application\GameProgress\Result.h" />
     <ClInclude Include="Src\Application\GameProgress\Title.h" />
     <ClInclude Include="Src\Application\Player\Bullet.h" />
     <ClInclude Include="Src\Application\Player\Player.h" />
@@ -177,6 +178,7 @@
     <ClInclude Include="Src\Application\UI\Dying.h" />
     <ClInclude Include="Src\Application\UI\Heart.h" />
     <ClInclude Include="Src\Application\UI\Mosaic.h" />
+    <ClInclude Include="Src\Application\UI\Score.h" />
     <ClInclude Include="Src\Application\UI\Timer.h" />
     <ClInclude Include="Src\System\Audio\KdAudio.h" />
     <ClInclude Include="src\System\Direct3D\KdDirect3D.h" />
@@ -211,6 +213,7 @@
     <ClCompile Include="Src\Application\Enemy\Red.cpp" />
     <ClCompile Include="Src\Application\Enemy\yellow.cpp" />
     <ClCompile Include="Src\Application\GameProgress\GamePlay.cpp" />
+    <ClCompile Include="Src\Application\GameProgress\Result.cpp" />
     <ClCompile Include="Src\Application\GameProgress\Title.cpp" />
     <ClCompile Include="Src\Application\Player\Bullet.cpp" />
     <ClCompile Include="Src\Application\Player\Player.cpp" />
@@ -219,6 +222,7 @@
     <ClCompile Include="Src\Application\UI\Dying.cpp" />
     <ClCompile Include="Src\Application\UI\Heart.cpp" />
     <ClCompile Include="Src\Application\UI\Mosaic.cpp" />
+    <ClCompile Include="Src\Application\UI\Score.cpp" />
     <ClCompile Include="Src\Application\UI\Timer.cpp" />
     <ClCompile Include="Src\System\Audio\KdAudio.cpp" />
     <ClCompile Include="src\System\Direct3D\KdDirect3D.cpp" />

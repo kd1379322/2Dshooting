@@ -20,6 +20,8 @@ class C_Circle;
 
 class C_Timer;
 
+class C_Score;
+
 class C_GamePlay
 {
 public:
@@ -40,6 +42,8 @@ public:
 
 	bool GetResultGo_T() { return Timeup; }
 
+	int GetRastScore() { return score_tmp; }
+
 	void Reset();
 
 private:
@@ -53,8 +57,6 @@ private:
 	int GameCnt;
 	std::shared_ptr<C_Player> m_player = nullptr;
 
-	KdTexture m_playerTex;		//プレイヤー画像
-
 	std::vector<std::shared_ptr<C_EnemyBase>> m_enemyList;
 
 	static const int cpyMax = 15;
@@ -64,6 +66,7 @@ private:
 	std::shared_ptr<C_Dying> m_dying = nullptr;
 	std::shared_ptr<C_pcc> m_pcc = nullptr;
 	std::shared_ptr<C_Timer>m_timer = nullptr;
+	std::shared_ptr<C_Score>m_score = nullptr;
 
 
 	static const int CircleMax = 15;
@@ -86,5 +89,6 @@ private:
 
 	bool Timeup = false;
 
+	int score_tmp = 0;
 };
 

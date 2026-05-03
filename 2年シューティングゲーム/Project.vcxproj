@@ -161,6 +161,7 @@
     <ClInclude Include="..\Library\tinygltf\tiny_gltf.h" />
     <ClInclude Include="Src\Application\Efect\pcc.h" />
     <ClInclude Include="Src\Application\Enemy\EnemyBase.h" />
+    <ClInclude Include="Src\Application\Enemy\Red.h" />
     <ClInclude Include="Src\Application\GameProgress\GamePlay.h" />
     <ClInclude Include="Src\Application\GameProgress\Title.h" />
     <ClInclude Include="Src\Application\Player\Bullet.h" />
@@ -192,6 +193,7 @@
     <ClCompile Include="..\Library\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Src\Application\Efect\pcc.cpp" />
     <ClCompile Include="Src\Application\Enemy\EnemyBase.cpp" />
+    <ClCompile Include="Src\Application\Enemy\Red.cpp" />
     <ClCompile Include="Src\Application\GameProgress\GamePlay.cpp" />
     <ClCompile Include="Src\Application\GameProgress\Title.cpp" />
     <ClCompile Include="Src\Application\Player\Bullet.cpp" />

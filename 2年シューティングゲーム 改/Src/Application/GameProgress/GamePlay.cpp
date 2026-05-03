@@ -12,6 +12,7 @@
 #include"../UI/Heart.h"
 #include"../UI/Dying.h"
 #include"../UI/Timer.h"
+#include"../UI/Score.h"
 
 void C_GamePlay::Init()
 {
@@ -77,6 +78,9 @@ void C_GamePlay::Init()
 
 	m_timer = std::make_shared<C_Timer>();
 	m_timer->Init();
+
+	m_score = std::make_shared<C_Score>();
+	m_score->Init();
 
 	for (int i=0;i<CircleMax;++i)
 	{
@@ -210,6 +214,7 @@ void C_GamePlay::Update()
 				case 0:
 					break;
 				case 1:
+					m_score->ScoreUp();
 					Circle(e->Getpos(), m_Bullet[i]->Getbcn());
 					e->Kill();
 					for (int j = 0; j < 5; j++)
@@ -222,6 +227,7 @@ void C_GamePlay::Update()
 					}
 					break;
 				case 2:
+					m_score->ScoreUp();
 					Circle(e->Getpos(), m_Bullet[i]->Getbcn());
 					e->Kill();
 					for (int j = 5; j < 10; j++)
@@ -234,6 +240,7 @@ void C_GamePlay::Update()
 					}
 					break;
 				case 3:
+					m_score->ScoreUp();
 					Circle(e->Getpos(), m_Bullet[i]->Getbcn());
 					e->Kill();
 					for (int j = 10; j < 15; j++)
@@ -246,6 +253,7 @@ void C_GamePlay::Update()
 					}
 					break;
 				case 10:
+					m_score->ScoreUp();
 					Circle(e->Getpos(), m_Bullet[i]->Getbcn());
 					e->Kill();
 					break;
@@ -276,6 +284,7 @@ void C_GamePlay::Update()
 				case 0:
 					break;
 				case 10:
+					m_score->ScoreUp();
 					Circle(m_copyenemy[i]->Getpos(), m_Bullet[j]->Getbcn());
 					m_copyenemy[i]->Kill();
 					break;
@@ -308,14 +317,16 @@ void C_GamePlay::Update()
 	m_dying->UpdateDying();
 	m_pcc->Update();
 	m_timer->Update();
+	m_score->Update();
 
 	for (auto& i : m_circle)
 	{
 		i->Update();
 	}
 
-	if (m_timer->GetFinish())
+	if (m_timer->GetFinish() || !m_player->GetMflg())
 	{
+		score_tmp = m_score->GetScore();
 		Timeup = true;
 	}
 
@@ -365,6 +376,7 @@ void C_GamePlay::Draw2D()
 	{
 		i->Draw2D();
 	}
+	m_score->Draw2D();
 }
 
 void C_GamePlay::ImGuiUpdate()
@@ -381,6 +393,7 @@ void C_GamePlay::Reset()
 	m_dying = nullptr;
 	m_pcc = nullptr;
 	m_timer = nullptr;
+	m_score = nullptr;
 
 	// 敵リスト（vector）
 	m_enemyList.clear();
@@ -407,6 +420,7 @@ void C_GamePlay::Reset()
 	Bulletkeyflg = false;
 	BulletCnt = 0;
 	BulletColorNumber = 1;
+	score_tmp = 0;
 
 	Timeup = false;
 }
@@ -427,7 +441,7 @@ void C_GamePlay::Circle(Math::Vector2 p_pos, int a)
 
 void C_GamePlay::Release()
 {
-	m_playerTex.Release();
+	m_backgroundTex.Release();
 	//m_enemyTex.Release();
 	//m_BulletTex.Release();	
 }

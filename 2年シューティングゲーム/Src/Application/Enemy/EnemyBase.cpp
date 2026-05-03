@@ -199,3 +199,13 @@ int C_EnemyBase::CheckColor(int i, int j)//iが弾の色、jが敵の色
 	}
 
 }
+
+bool C_EnemyBase::CheckColor(int i)
+{
+	return false;
+}
+
+void C_EnemyBase::Release()
+{
+	m_Tex.Release();
+}

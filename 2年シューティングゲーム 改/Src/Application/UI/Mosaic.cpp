@@ -17,7 +17,7 @@ void C_Mosaic::Update()
 	{
 		if (Alpha < 1.0f)
 		{
-			Alpha += 0.05f;
+			Alpha += 0.02f;
 		}
 
 	}
@@ -25,7 +25,7 @@ void C_Mosaic::Update()
 	{
 		if (Alpha > 0.0f)
 		{
-			Alpha -= 0.05f;
+			Alpha -= 0.02f;
 		}
 	}
 

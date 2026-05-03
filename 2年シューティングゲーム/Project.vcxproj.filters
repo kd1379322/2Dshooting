@@ -168,6 +168,9 @@
     <ClInclude Include="Src\Application\Efect\pcc.h">
       <Filter>Src\Application\Efect</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Application\Enemy\Red.h">
+      <Filter>Src\Application\Enemy</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -250,6 +253,9 @@
     </ClCompile>
     <ClCompile Include="Src\Application\Efect\pcc.cpp">
       <Filter>Src\Application\Efect</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Enemy\Red.cpp">
+      <Filter>Src\Application\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

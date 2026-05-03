@@ -4,7 +4,7 @@ class C_EnemyBase
 {
 public:
 	C_EnemyBase(){}
-	~C_EnemyBase(){}
+	virtual ~C_EnemyBase(){}
 
 	// 初期設定
 	void Init();
@@ -31,9 +31,13 @@ public:
 
 	int CheckColor(int i,int j);
 
+	bool CheckColor(int i);
+
 	Math::Vector2 Getpos() { return m_pos; }
 
 protected:
+
+	void Release();		// 解放処理
 
 	const float m_moveSpeed = -4.0f;	//移動速度
 

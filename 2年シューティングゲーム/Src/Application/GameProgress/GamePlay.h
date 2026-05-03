@@ -45,6 +45,9 @@ private:
 	static const int MaxEnemy = 18;
 	std::shared_ptr<C_EnemyBase> m_enemy[MaxEnemy];
 
+	std::vector<std::shared_ptr<C_EnemyBase>> m_enemyList;
+
+
 
 	static const int MaxcloneEnemy = 9;
 	std::shared_ptr<C_EnemyBase> m_cloneEnemy[MaxcloneEnemy];

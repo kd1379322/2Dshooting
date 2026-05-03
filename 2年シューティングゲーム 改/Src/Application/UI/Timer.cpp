@@ -3,7 +3,7 @@
 void C_Timer::Init()
 {
 	m_tex.Load("Texture/Digit.png");
-	m_totalTime = 20; // ← 2分（120秒）
+	m_totalTime = 120; // ← 2分（120秒）
 	m_isFinish = false;
 	m_frameCnt = 0;
 }
@@ -37,7 +37,7 @@ void C_Timer::Update()
 	// 行列更新（そのままでOK）
 	for (int i = 0; i < MAX_DIGITS; ++i)
 	{
-		m_pos[i].x = -100 + (i * 128*0.3f);
+		m_pos[i].x = -380 + (i * 128*0.3f);
 		m_pos[i].y = 320;
 		Math::Matrix scale = Math::Matrix::CreateScale(m_scale.x, m_scale.y, 1);
 		Math::Matrix trans = Math::Matrix::CreateTranslation(m_pos[i].x, m_pos[i].y, 0);

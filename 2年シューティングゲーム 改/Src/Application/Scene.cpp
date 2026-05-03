@@ -2,6 +2,7 @@
 #include "Scene.h"
 #include "GameProgress/Title.h"
 #include "GameProgress/GamePlay.h"
+#include "GameProgress/Result.h"
 #include "UI/Mosaic.h"
 
 void Scene::Draw2D()
@@ -15,6 +16,7 @@ void Scene::Draw2D()
 		m_GamePlay->Draw2D();
 		break;
 	case Result:
+		m_Result->Draw2D();
 		break;
 	default:
 		break;
@@ -60,8 +62,8 @@ void Scene::Update()
 		{
 			if (!Spacekeyflg)
 			{
+				m_Result->SetScore(m_GamePlay->GetRastScore());
 				m_mosaic->Up();
-
 				Spacekeyflg = true;
 			}
 		}
@@ -70,7 +72,7 @@ void Scene::Update()
 		{
 			m_mosaic->Down();
 			nowScene = Result;
-
+			m_Result->Init();
 		}
 		else
 		{
@@ -79,6 +81,7 @@ void Scene::Update()
 
 		break;
 	case Result:
+		m_Result->Update();
 		if (GetAsyncKeyState('T') & 0x8000)
 		{
 			if (!Spacekeyflg)
@@ -111,6 +114,7 @@ void Scene::Init()
 {
 	m_Title = std::make_shared<C_Title>();
 	m_GamePlay = std::make_shared<C_GamePlay>();
+	m_Result = std::make_shared<C_Result>();
 	m_mosaic = std::make_shared<C_Mosaic>();
 	nowScene = Title;
 	m_Title->Init();

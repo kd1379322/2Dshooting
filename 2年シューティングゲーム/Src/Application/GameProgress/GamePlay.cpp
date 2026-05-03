@@ -1,7 +1,7 @@
 #include "GamePlay.h"
 #include "../Efect/pcc.h"
 #include"../Player/Player.h"
-#include"../Enemy/EnemyBase.h"
+#include"../Enemy/Red.h"
 #include"../Player/Bullet.h"
 
 void C_GamePlay::Init()
@@ -28,6 +28,7 @@ void C_GamePlay::Init()
 		m_cloneEnemy[i] = std::make_shared<C_EnemyBase>();
 		m_cloneEnemy[i]->Init();
 	}
+
 
 	for (int i = 0; i < MaxBullet; i++)
 	{
@@ -61,11 +62,13 @@ void C_GamePlay::Update()
 		}
 	}
 
+
 	//==============================
 	// 更新
 	//==============================
 	m_player->Update();
 
+	
 	for (int i = 0; i < MaxEnemy; i++) m_enemy[i]->Update();
 	for (int i = 0; i < MaxcloneEnemy; i++) m_cloneEnemy[i]->Update();
 	for (int i = 0; i < MaxBullet; i++) m_Bullet[i]->Update();
@@ -213,6 +216,7 @@ void C_GamePlay::Update()
 		if (m_cloneEnemy[j]->GetMflg() && m_player->EnemyHit(m_cloneEnemy[j]->Getpos()));
 		
 	}
+
 
 
 	//==============================

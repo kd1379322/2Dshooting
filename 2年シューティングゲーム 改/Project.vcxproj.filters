@@ -204,6 +204,12 @@
     <ClInclude Include="Src\Application\UI\Timer.h">
       <Filter>Src\Application\UI</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Application\UI\Score.h">
+      <Filter>Src\Application\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\GameProgress\Result.h">
+      <Filter>Src\Application\GameProgress</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -319,6 +325,12 @@
     </ClCompile>
     <ClCompile Include="Src\Application\UI\Timer.cpp">
       <Filter>Src\Application\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\UI\Score.cpp">
+      <Filter>Src\Application\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\GameProgress\Result.cpp">
+      <Filter>Src\Application\GameProgress</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
