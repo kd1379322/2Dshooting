@@ -6,6 +6,8 @@ void C_Orange::Init()
 
 	color = { 1,0.3f,0,1 };		//橙
 
+	Moveflg = false;
+
 	m_scaleMat = Math::Matrix::CreateScale(1, 1, 0);
 	m_transMat = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
 	m_mat = m_scaleMat * m_transMat;

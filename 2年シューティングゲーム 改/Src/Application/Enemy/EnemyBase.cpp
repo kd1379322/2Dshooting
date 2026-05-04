@@ -56,24 +56,25 @@ float C_EnemyBase::RandomApp()
 bool C_EnemyBase::BulletHit(Math::Vector2 p_pos)
 {
 	if (m_pos.x > ScreenRight)return false;
+	if (!Moveflg)return false;
+
 
 	const float x = m_pos.x - p_pos.x;
 	const float y = m_pos.y - p_pos.y;
 	const float z = sqrt(x * x + y * y);
 
-	if (Moveflg)
+	
+	if (z < 64)
 	{
-		if (z < 64)
-		{
 
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-
+		return true;
 	}
+	else
+	{
+		return false;
+	}
+
+	
 }
 
 int C_EnemyBase::CheckColor(int i)

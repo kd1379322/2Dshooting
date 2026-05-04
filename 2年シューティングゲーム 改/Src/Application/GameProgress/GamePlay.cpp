@@ -1,6 +1,8 @@
 #include "GamePlay.h"
 #include "../Efect/pcc.h"
 #include "../Efect/circle.h"
+#include "../Efect/damage.h"
+#include "../Efect/edmecut.h"
 #include"../Player/Player.h"
 #include"../Enemy/Red.h"
 #include"../Enemy/Blue.h"
@@ -82,6 +84,15 @@ void C_GamePlay::Init()
 	m_score = std::make_shared<C_Score>();
 	m_score->Init();
 
+	m_damage = std::make_shared<C_damage>();
+	m_damage->Init();
+	
+	for (int i = 0; i < efctMax; ++i)
+	{
+		m_edmecut[i] = std::make_shared<C_edmecut>();
+		m_edmecut[i]->Init();
+	}
+
 	for (int i=0;i<CircleMax;++i)
 	{
 
@@ -124,14 +135,14 @@ void C_GamePlay::Update()
 	m_player->Update();
 	for (auto& e : m_enemyList)
 	{
-		e->Update();	
+		e->Update();
 	}
 
 	for (int i = 0; i < cpyMax; i++)
 	{
 		m_copyenemy[i]->Update();
 	}
-	
+
 	for (int i = 0; i < MaxBullet; i++) m_Bullet[i]->Update();
 
 
@@ -208,10 +219,11 @@ void C_GamePlay::Update()
 			if (e->GetMflg() && m_Bullet[i]->GetMflg() && e->BulletHit(m_Bullet[i]->Getpos()))
 			{
 				m_Bullet[i]->HitEnemy();
-				
+
 				switch (e->CheckColor(m_Bullet[i]->Getbcn()))
 				{
 				case 0:
+					Edmecut(e->Getpos());
 					break;
 				case 1:
 					m_score->ScoreUp();
@@ -264,12 +276,22 @@ void C_GamePlay::Update()
 			}
 		}
 
-		//敵と自機の当たり判定
-		if (e->GetMflg() && m_player->EnemyHit(e->Getpos()));
-		{
-			
-		}
+		
 
+	}
+
+	for (auto& e : m_enemyList)
+	{
+		//敵と自機の当たり判定
+		if (e->GetMflg())
+		{
+			if(m_player->EnemyHit(e->Getpos()))
+			{
+				m_damage->App(m_player->Getpos());
+				m_player->Damege();
+			}
+
+		}
 	}
 
 	for (int i = 0; i < cpyMax; i++)
@@ -282,6 +304,7 @@ void C_GamePlay::Update()
 				switch (m_copyenemy[i]->CheckColor(m_Bullet[j]->Getbcn()))
 				{
 				case 0:
+					Edmecut(m_copyenemy[i]->Getpos());
 					break;
 				case 10:
 					m_score->ScoreUp();
@@ -293,12 +316,19 @@ void C_GamePlay::Update()
 				}
 			}
 		}
+	}
 
-		if (m_copyenemy[i]->GetMflg() && m_player->EnemyHit(m_copyenemy[i]->Getpos()))
+	for (int i = 0; i < cpyMax; i++)
+	{
+		if (m_copyenemy[i]->GetMflg())
 		{
-			
-		}
+			if(m_player->EnemyHit(m_copyenemy[i]->Getpos()))
+			{
+				m_damage->App(m_player->Getpos());
+				m_player->Damege();
+			}
 
+		}
 	}
 
 	//==============================
@@ -318,6 +348,12 @@ void C_GamePlay::Update()
 	m_pcc->Update();
 	m_timer->Update();
 	m_score->Update();
+	m_damage->Update();
+
+	for(auto& i: m_edmecut)
+	{
+		i->Update();
+	}
 
 	for (auto& i : m_circle)
 	{
@@ -377,6 +413,11 @@ void C_GamePlay::Draw2D()
 		i->Draw2D();
 	}
 	m_score->Draw2D();
+	m_damage->Draw();
+	for (auto& i : m_edmecut)
+	{
+		i->Draw();
+	}
 }
 
 void C_GamePlay::ImGuiUpdate()
@@ -394,6 +435,8 @@ void C_GamePlay::Reset()
 	m_pcc = nullptr;
 	m_timer = nullptr;
 	m_score = nullptr;
+	m_damage = nullptr;
+	
 
 	// 敵リスト（vector）
 	m_enemyList.clear();
@@ -412,6 +455,11 @@ void C_GamePlay::Reset()
 	for (int i = 0; i < CircleMax; i++)
 	{
 		m_circle[i] = nullptr;
+	}
+
+	for (int i = 0; i < efctMax; i++)
+	{
+		m_edmecut[i] = nullptr;
 	}
 
 	// フラグ系もリセット（重要）
@@ -436,6 +484,18 @@ void C_GamePlay::Circle(Math::Vector2 p_pos, int a)
 		}
 	}
 
+}
+
+void C_GamePlay::Edmecut(Math::Vector2 p_pos)
+{
+	for (auto& i : m_edmecut)
+	{
+		if (!i->GetMflg())
+		{
+			i->App(p_pos);
+			break;
+		}
+	}
 }
 
 

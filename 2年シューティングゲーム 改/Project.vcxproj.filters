@@ -210,6 +210,15 @@
     <ClInclude Include="Src\Application\GameProgress\Result.h">
       <Filter>Src\Application\GameProgress</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Application\Efect\EfectBase.h">
+      <Filter>Src\Application\Efect</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Efect\damage.h">
+      <Filter>Src\Application\Efect</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Efect\edmecut.h">
+      <Filter>Src\Application\Efect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -331,6 +340,15 @@
     </ClCompile>
     <ClCompile Include="Src\Application\GameProgress\Result.cpp">
       <Filter>Src\Application\GameProgress</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Efect\EfectBase.cpp">
+      <Filter>Src\Application\Efect</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Efect\damage.cpp">
+      <Filter>Src\Application\Efect</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Efect\edmecut.cpp">
+      <Filter>Src\Application\Efect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

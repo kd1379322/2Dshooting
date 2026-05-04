@@ -82,7 +82,7 @@ void Scene::Update()
 		break;
 	case Result:
 		m_Result->Update();
-		if (GetAsyncKeyState('T') & 0x8000)
+		if (m_Result->GetNextScene() && GetAsyncKeyState(VK_SPACE) & 0x8000)
 		{
 			if (!Spacekeyflg)
 			{

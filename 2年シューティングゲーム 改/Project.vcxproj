@@ -160,6 +160,9 @@
     <ClInclude Include="..\Library\tinygltf\stb_image_write.h" />
     <ClInclude Include="..\Library\tinygltf\tiny_gltf.h" />
     <ClInclude Include="Src\Application\Efect\circle.h" />
+    <ClInclude Include="Src\Application\Efect\damage.h" />
+    <ClInclude Include="Src\Application\Efect\edmecut.h" />
+    <ClInclude Include="Src\Application\Efect\EfectBase.h" />
     <ClInclude Include="Src\Application\Efect\pcc.h" />
     <ClInclude Include="Src\Application\Enemy\blue.h" />
     <ClInclude Include="Src\Application\Enemy\EnemyBase.h" />
@@ -204,6 +207,9 @@
     <ClCompile Include="..\Library\imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="..\Library\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Src\Application\Efect\circle.cpp" />
+    <ClCompile Include="Src\Application\Efect\damage.cpp" />
+    <ClCompile Include="Src\Application\Efect\edmecut.cpp" />
+    <ClCompile Include="Src\Application\Efect\EfectBase.cpp" />
     <ClCompile Include="Src\Application\Efect\pcc.cpp" />
     <ClCompile Include="Src\Application\Enemy\blue.cpp" />
     <ClCompile Include="Src\Application\Enemy\EnemyBase.cpp" />

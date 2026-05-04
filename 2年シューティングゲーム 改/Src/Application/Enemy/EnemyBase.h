@@ -43,8 +43,8 @@ protected:
 
 	const float m_moveSpeed = -4.0f;	//移動速度
 
-	const float ScreenTop = 360;
-	const float ScreenBottom = -360;
+	const float ScreenTop = 360 - 128;
+	const float ScreenBottom = -360 + 128;
 	const float ScreenLeft = -640;
 	const float ScreenRight = 640;
 
@@ -56,7 +56,7 @@ protected:
 
 	KdTexture m_Tex;			//画像用	
 
-	Math::Vector2 m_pos;		//座標
+	Math::Vector2 m_pos = {704,0};		//座標
 
 	Math::Matrix m_transMat;	//移動行列
 	Math::Matrix m_scaleMat;	//拡大行列

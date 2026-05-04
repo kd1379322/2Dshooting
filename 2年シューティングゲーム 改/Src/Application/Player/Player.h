@@ -27,6 +27,8 @@ public:
 
 	bool EnemyHit(Math::Vector2 p_pos);
 
+	void Damege();
+
 private:
 
 	const float m_moveSpeed = 16.0f;	//移動速度

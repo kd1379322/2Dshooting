@@ -113,23 +113,19 @@ void C_Player::ImGuiUpdate()
 
 bool C_Player::EnemyHit(Math::Vector2 p_pos)
 {
+	if (!Moveflg) return false;
+	if (DamegeIframes) return false;
+
 	const float x = m_pos.x - p_pos.x;
 	const float y = m_pos.y - p_pos.y;
 	const float z = sqrt(x * x + y * y);
 
-	if (Moveflg)
-	{
-		if (z < 64 && !DamegeIframes)
-		{
-			Hp -= 1;
-			DamegeIframes = true;
-			if (Hp == 0)Moveflg = false;
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+	return z < 64;
+}
 
-	}
+void C_Player::Damege()
+{
+	Hp -= 1;
+	DamegeIframes = true;
+	if (Hp == 0)Moveflg = false;
 }

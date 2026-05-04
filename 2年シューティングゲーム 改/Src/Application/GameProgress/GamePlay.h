@@ -22,6 +22,10 @@ class C_Timer;
 
 class C_Score;
 
+class C_damage;
+
+class C_edmecut;
+
 class C_GamePlay
 {
 public:
@@ -51,6 +55,7 @@ private:
 	void Release();		// 解放処理
 
 	void Circle(Math::Vector2 p_pos, int a);
+	void Edmecut(Math::Vector2 p_pos);
 
 	KdTexture m_backgroundTex;
 
@@ -67,7 +72,9 @@ private:
 	std::shared_ptr<C_pcc> m_pcc = nullptr;
 	std::shared_ptr<C_Timer>m_timer = nullptr;
 	std::shared_ptr<C_Score>m_score = nullptr;
-
+	std::shared_ptr<C_damage>m_damage = nullptr;
+	static const int efctMax = 15;
+	std::shared_ptr<C_edmecut>m_edmecut[efctMax] = { nullptr };
 
 	static const int CircleMax = 15;
 	std::shared_ptr<C_Circle> m_circle[CircleMax] = { nullptr };
