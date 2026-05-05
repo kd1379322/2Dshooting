@@ -219,6 +219,15 @@
     <ClInclude Include="Src\Application\Efect\edmecut.h">
       <Filter>Src\Application\Efect</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Application\UI\Selectkey.h">
+      <Filter>Src\Application\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\UI\Countdown.h">
+      <Filter>Src\Application\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\UI\Text.h">
+      <Filter>Src\Application\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -349,6 +358,15 @@
     </ClCompile>
     <ClCompile Include="Src\Application\Efect\edmecut.cpp">
       <Filter>Src\Application\Efect</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\UI\Selectkey.cpp">
+      <Filter>Src\Application\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\UI\Countdown.cpp">
+      <Filter>Src\Application\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\UI\Text.cpp">
+      <Filter>Src\Application\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

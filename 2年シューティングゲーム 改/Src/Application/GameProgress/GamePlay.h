@@ -26,6 +26,12 @@ class C_damage;
 
 class C_edmecut;
 
+class C_Selectkey;
+
+class C_Countdown;
+
+class C_Text;
+
 class C_GamePlay
 {
 public:
@@ -44,7 +50,7 @@ public:
 	// GUI処理
 	void ImGuiUpdate();
 
-	bool GetResultGo_T() { return Timeup; }
+	bool GetResultGo_T() { return NextScene; }
 
 	int GetRastScore() { return score_tmp; }
 
@@ -56,6 +62,9 @@ private:
 
 	void Circle(Math::Vector2 p_pos, int a);
 	void Edmecut(Math::Vector2 p_pos);
+
+	int m_waitCnt = 0;   // 待機フレーム
+	int m_waitEndCnt = 0;   // 待機フレーム
 
 	KdTexture m_backgroundTex;
 
@@ -73,6 +82,10 @@ private:
 	std::shared_ptr<C_Timer>m_timer = nullptr;
 	std::shared_ptr<C_Score>m_score = nullptr;
 	std::shared_ptr<C_damage>m_damage = nullptr;
+	std::shared_ptr<C_Selectkey>m_selectkey = nullptr;
+	std::shared_ptr<C_Countdown>m_countdown = nullptr;
+	std::shared_ptr<C_Text>m_text = nullptr;
+
 	static const int efctMax = 15;
 	std::shared_ptr<C_edmecut>m_edmecut[efctMax] = { nullptr };
 
@@ -95,6 +108,7 @@ private:
 	Math::Vector2 Backgroundpos = { 0,0 };
 
 	bool Timeup = false;
+	bool NextScene = false;
 
 	int score_tmp = 0;
 };

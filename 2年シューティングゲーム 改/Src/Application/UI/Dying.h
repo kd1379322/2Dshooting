@@ -3,13 +3,15 @@ class C_Dying
 {
 public:
 	C_Dying() {}
-	~C_Dying() {}
+	~C_Dying() { Release(); }
 
 	void InitDying();
 	void UpdateDying();
 	void DrawDying();
 
 private:
+
+	void Release();		// ‰ğ•úˆ—
 
 	float Alpha;
 	bool tenmetuflg;

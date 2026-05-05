@@ -47,3 +47,8 @@ void C_Dying::DrawDying()
 
 	D3D.SetBlendState(BlendMode::Alpha);	//”¼“§–¾
 }
+
+void C_Dying::Release()
+{
+	m_tex.Release();
+}

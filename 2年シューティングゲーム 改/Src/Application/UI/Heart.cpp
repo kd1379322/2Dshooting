@@ -5,7 +5,7 @@ void C_Heart::Init()
 	m_tex.Load("Texture/Heart.png");
 
 	animcnt = 0;
-	
+	Alpha = 1.0f;
 	for(int i = 0;i<3;i++)
 	{
 		m_scale[i] = {4,4};
@@ -21,6 +21,11 @@ void C_Heart::Init()
 
 void C_Heart::Update()
 {
+	if (Alpha <= 1.0f)
+	{
+		Alpha += 0.02f;
+	}
+
 	for (int i = 0;i < 3;i++)
 	{
 		m_scaleMat[i] = Math::Matrix::CreateScale(m_scale[i].x, m_scale[i].y, 0);
@@ -49,7 +54,26 @@ void C_Heart::Draw2D(int hp)
 		}
 
 		SHADER.m_spriteShader.SetMatrix(m_mat[i]);
-		SHADER.m_spriteShader.DrawTex(&m_tex, rect, 1.0f);
+		SHADER.m_spriteShader.DrawTex(&m_tex, rect, Alpha);
 	}
 
+}
+
+void C_Heart::DownAlpha(Math::Vector2 p_pos)
+{
+	const float x = (m_pos[1].x - p_pos.x) * 0.5f; // ‰¡‚¾‚¯k‚ß‚é
+	const float y = m_pos[1].y - p_pos.y;
+
+	const float z = sqrt(x * x + y * y);
+
+	if (z < 64)
+	{
+		Alpha = 0.1f;
+	}
+
+}
+
+void C_Heart::Relese()
+{
+	m_tex.Release();
 }

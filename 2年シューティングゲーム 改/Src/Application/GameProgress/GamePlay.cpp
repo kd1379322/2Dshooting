@@ -15,20 +15,26 @@
 #include"../UI/Dying.h"
 #include"../UI/Timer.h"
 #include"../UI/Score.h"
+#include"../UI/Selectkey.h"
+#include"../UI/Countdown.h"
+#include"../UI/Text.h"
+
 
 void C_GamePlay::Init()
 {
 	
-
 	m_backgroundTex.Load("Texture/pixelart_starfield.png");
 
 	GameCnt = 0;
 	Bulletkeyflg = false;
 	BulletCnt = 0;
 	BulletColorNumber = 1;
-
+	m_waitCnt = 0;
+	m_waitEndCnt = 0;
 	m_player = std::make_shared<C_Player>();
 	m_player->Init();
+
+
 
 	for (int i = 0; i < 3; ++i)m_enemyList.push_back(std::make_shared<C_Red>());
 	for (int i = 0; i < 3; ++i)m_enemyList.push_back(std::make_shared<C_Blue>());
@@ -87,6 +93,16 @@ void C_GamePlay::Init()
 	m_damage = std::make_shared<C_damage>();
 	m_damage->Init();
 	
+	m_selectkey = std::make_shared<C_Selectkey>();
+	m_selectkey->Init();
+
+	m_countdown = std::make_shared<C_Countdown>();
+	m_countdown->Init();
+
+	m_text = std::make_shared<C_Text>();
+	m_text->Init();
+
+
 	for (int i = 0; i < efctMax; ++i)
 	{
 		m_edmecut[i] = std::make_shared<C_edmecut>();
@@ -95,239 +111,285 @@ void C_GamePlay::Init()
 
 	for (int i=0;i<CircleMax;++i)
 	{
-
 		m_circle[i] = std::make_shared<C_Circle>();
 		m_circle[i]->Init();
 	}
 
-	if (m_timer->GetFinish())
-	{
-		Timeup = true;
-	}
+	
 }
 
 void C_GamePlay::Update()
 {
 	GameCnt++;
+	m_countdown->Update();
+	m_text->Update();
 
-
-	//==============================
-	// 乱数生成
-	//==============================
-	static std::random_device rd;
-	static std::mt19937 gen(rd());
-	std::uniform_int_distribution<int> dist(0, 499); // 500分の1
-
-	//==============================
-	// 敵生成
-	//==============================
-	for (auto& e : m_enemyList)
+	if (m_waitCnt <= 240)
 	{
-		if (dist(gen) == 0 && !e->GetMflg())
+		m_waitCnt++;
+		if (m_waitCnt == 60 || m_waitCnt == 120 || m_waitCnt == 180 || m_waitCnt == 240)
 		{
-			e->App();
+			m_countdown->App();
+		}
+
+	}
+	else if (Timeup)
+	{
+		m_waitEndCnt++;
+		if (m_waitEndCnt >= 120)
+		{
+			NextScene = true;
 		}
 	}
-
-	//==============================
-	// 更新
-	//==============================
-	m_player->Update();
-	for (auto& e : m_enemyList)
+	else
 	{
-		e->Update();
-	}
+		
 
-	for (int i = 0; i < cpyMax; i++)
-	{
-		m_copyenemy[i]->Update();
-	}
-
-	for (int i = 0; i < MaxBullet; i++) m_Bullet[i]->Update();
-
-
-	//==============================
-	// 弾の色変更
-	//==============================
-	if (GetAsyncKeyState('Z') & 0x8000)
-	{
-		if (BulletColorNumber != 1)
-		{
-			BulletColorNumber = 1;
-			m_pcc->App(m_player->Getpos(), BulletColorNumber);
-		}
-	}
-
-	if (GetAsyncKeyState('X') & 0x8000)
-	{
-		if (BulletColorNumber != 2)
-		{
-			BulletColorNumber = 2;
-			m_pcc->App(m_player->Getpos(), BulletColorNumber);
-		}
-	}
-
-	if (GetAsyncKeyState('C') & 0x8000)
-	{
-		if (BulletColorNumber != 3)
-		{
-			BulletColorNumber = 3;
-			m_pcc->App(m_player->Getpos(), BulletColorNumber);
-		}
-	}
-
-	//==============================
-	// 弾発射
-	//==============================
-	//if (GetAsyncKeyState(VK_SPACE) & 0x8000)
-	{
-		if (!Bulletkeyflg)
-		{
-			Bulletkeyflg = true;
-
-			for (int i = 0; i < MaxBullet; i++)
-			{
-				if (!m_Bullet[i]->GetMflg() && m_player->GetMflg())
-				{
-					m_Bullet[i]->App(m_player->Getpos(), BulletColorNumber);
-					break; // ← return禁止
-				}
-			}
-		}
-	}
-
-	// 発射間隔
-	if (Bulletkeyflg)
-	{
-		BulletCnt++;
-		if (BulletCnt >= 10)
-		{
-			BulletCnt = 0;
-			Bulletkeyflg = false;
-		}
-	}
-
-	//==============================
-	// 当たり判定（敵）
-	//==============================
-	for (auto& e : m_enemyList)
-	{
-
-		//弾
-		for (int i = 0; i < MaxBullet; i++)
-		{
-			if (e->GetMflg() && m_Bullet[i]->GetMflg() && e->BulletHit(m_Bullet[i]->Getpos()))
-			{
-				m_Bullet[i]->HitEnemy();
-
-				switch (e->CheckColor(m_Bullet[i]->Getbcn()))
-				{
-				case 0:
-					Edmecut(e->Getpos());
-					break;
-				case 1:
-					m_score->ScoreUp();
-					Circle(e->Getpos(), m_Bullet[i]->Getbcn());
-					e->Kill();
-					for (int j = 0; j < 5; j++)
-					{
-						if (!m_copyenemy[j]->GetMflg())
-						{
-							m_copyenemy[j]->PosApp(e->Getpos());
-							break;
-						}
-					}
-					break;
-				case 2:
-					m_score->ScoreUp();
-					Circle(e->Getpos(), m_Bullet[i]->Getbcn());
-					e->Kill();
-					for (int j = 5; j < 10; j++)
-					{
-						if (!m_copyenemy[j]->GetMflg())
-						{
-							m_copyenemy[j]->PosApp(e->Getpos());
-							break;
-						}
-					}
-					break;
-				case 3:
-					m_score->ScoreUp();
-					Circle(e->Getpos(), m_Bullet[i]->Getbcn());
-					e->Kill();
-					for (int j = 10; j < 15; j++)
-					{
-						if (!m_copyenemy[j]->GetMflg())
-						{
-							m_copyenemy[j]->PosApp(e->Getpos());
-							break;
-						}
-					}
-					break;
-				case 10:
-					m_score->ScoreUp();
-					Circle(e->Getpos(), m_Bullet[i]->Getbcn());
-					e->Kill();
-					break;
-				default:
-					break;
-				}
-
-			}
-		}
+		m_timer->Update();
+		m_timer->DownAlpha(m_player->Getpos());
 
 		
 
-	}
-
-	for (auto& e : m_enemyList)
-	{
-		//敵と自機の当たり判定
-		if (e->GetMflg())
+		if (m_timer->GettotalTime() <= 3 && m_timer->GettotalTime() >= 1)
 		{
-			if(m_player->EnemyHit(e->Getpos()))
-			{
-				m_damage->App(m_player->Getpos());
-				m_player->Damege();
-			}
+			// 同じ処理
+			m_countdown->E_App(m_timer->GettotalTime());
 
 		}
-	}
 
-	for (int i = 0; i < cpyMax; i++)
-	{
-		for (int j = 0; j < MaxBullet; j++)
+		if (m_timer->GetFinish() || !m_player->GetMflg())
 		{
-			if (m_copyenemy[i]->GetMflg() && m_Bullet[j]->GetMflg() && m_copyenemy[i]->BulletHit(m_Bullet[j]->Getpos()))
+			score_tmp = m_score->GetScore();
+			m_text->TimeUpApp();
+			Timeup = true;
+		}
+
+		//==============================
+		// 乱数生成
+		//==============================
+		static std::random_device rd;
+		static std::mt19937 gen(rd());
+		std::uniform_int_distribution<int> dist(0, 499); // 500分の1
+
+		//==============================
+		// 敵生成
+		//==============================
+		for (auto& e : m_enemyList)
+		{
+			if (dist(gen) == 0 && !e->GetMflg())
 			{
-				m_Bullet[j]->HitEnemy();
-				switch (m_copyenemy[i]->CheckColor(m_Bullet[j]->Getbcn()))
+				e->App();
+			}
+		}
+
+		//==============================
+		// 更新
+		//==============================
+		m_player->Update();
+		for (auto& e : m_enemyList)
+		{
+			e->Update();
+		}
+
+		for (int i = 0; i < cpyMax; i++)
+		{
+			m_copyenemy[i]->Update();
+		}
+
+		for (int i = 0; i < MaxBullet; i++) m_Bullet[i]->Update();
+
+
+		//==============================
+		// 弾の色変更
+		//==============================
+		static short prevZ = 0;
+		static short prevX = 0;
+		static short prevC = 0;
+
+		short nowZ = GetAsyncKeyState('Z');
+		short nowX = GetAsyncKeyState('X');
+		short nowC = GetAsyncKeyState('C');
+
+		// 押された瞬間だけ検出（トリガー）
+		if ((nowZ & 0x8000) && !(prevZ & 0x8000))
+		{
+			if (BulletColorNumber != 1) {
+				BulletColorNumber = 1;
+				m_pcc->App(m_player->Getpos(), BulletColorNumber);
+			}
+		}
+		if ((nowX & 0x8000) && !(prevX & 0x8000))
+		{
+			if (BulletColorNumber != 2) {
+				BulletColorNumber = 2;
+				m_pcc->App(m_player->Getpos(), BulletColorNumber);
+			}
+		}
+		if ((nowC & 0x8000) && !(prevC & 0x8000))
+		{
+			if (BulletColorNumber != 3) {
+				BulletColorNumber = 3;
+				m_pcc->App(m_player->Getpos(), BulletColorNumber);
+			}
+		}
+
+		// 状態更新
+		prevZ = nowZ;
+		prevX = nowX;
+		prevC = nowC;
+		//==============================
+		// 弾発射
+		//==============================
+		//if (GetAsyncKeyState(VK_SPACE) & 0x8000)
+		{
+			if (!Bulletkeyflg)
+			{
+				Bulletkeyflg = true;
+
+				for (int i = 0; i < MaxBullet; i++)
 				{
-				case 0:
-					Edmecut(m_copyenemy[i]->Getpos());
-					break;
-				case 10:
-					m_score->ScoreUp();
-					Circle(m_copyenemy[i]->Getpos(), m_Bullet[j]->Getbcn());
-					m_copyenemy[i]->Kill();
-					break;
-				default:
-					break;
+					if (!m_Bullet[i]->GetMflg() && m_player->GetMflg())
+					{
+						m_Bullet[i]->App(m_player->Getpos(), BulletColorNumber);
+						break; // ← return禁止
+					}
 				}
 			}
 		}
-	}
 
-	for (int i = 0; i < cpyMax; i++)
-	{
-		if (m_copyenemy[i]->GetMflg())
+		// 発射間隔
+		if (Bulletkeyflg)
 		{
-			if(m_player->EnemyHit(m_copyenemy[i]->Getpos()))
+			BulletCnt++;
+			if (BulletCnt >= 10)
 			{
-				m_damage->App(m_player->Getpos());
-				m_player->Damege();
+				BulletCnt = 0;
+				Bulletkeyflg = false;
+			}
+		}
+
+		//==============================
+		// 当たり判定（敵）
+		//==============================
+		for (auto& e : m_enemyList)
+		{
+
+			//弾
+			for (int i = 0; i < MaxBullet; i++)
+			{
+				if (e->GetMflg() && m_Bullet[i]->GetMflg() && e->BulletHit(m_Bullet[i]->Getpos()))
+				{
+					m_Bullet[i]->HitEnemy();
+
+					switch (e->CheckColor(m_Bullet[i]->Getbcn()))
+					{
+					case 0:
+						Edmecut(e->Getpos());
+						break;
+					case 1:
+						m_score->ScoreUp();
+						Circle(e->Getpos(), m_Bullet[i]->Getbcn());
+						e->Kill();
+						for (int j = 0; j < 5; j++)
+						{
+							if (!m_copyenemy[j]->GetMflg())
+							{
+								m_copyenemy[j]->PosApp(e->Getpos());
+								break;
+							}
+						}
+						break;
+					case 2:
+						m_score->ScoreUp();
+						Circle(e->Getpos(), m_Bullet[i]->Getbcn());
+						e->Kill();
+						for (int j = 5; j < 10; j++)
+						{
+							if (!m_copyenemy[j]->GetMflg())
+							{
+								m_copyenemy[j]->PosApp(e->Getpos());
+								break;
+							}
+						}
+						break;
+					case 3:
+						m_score->ScoreUp();
+						Circle(e->Getpos(), m_Bullet[i]->Getbcn());
+						e->Kill();
+						for (int j = 10; j < 15; j++)
+						{
+							if (!m_copyenemy[j]->GetMflg())
+							{
+								m_copyenemy[j]->PosApp(e->Getpos());
+								break;
+							}
+						}
+						break;
+					case 10:
+						m_score->ScoreUp();
+						Circle(e->Getpos(), m_Bullet[i]->Getbcn());
+						e->Kill();
+						break;
+					default:
+						break;
+					}
+
+				}
 			}
 
+
+
+		}
+
+		for (auto& e : m_enemyList)
+		{
+			//敵と自機の当たり判定
+			if (e->GetMflg())
+			{
+				if (m_player->EnemyHit(e->Getpos()))
+				{
+					m_damage->App(m_player->Getpos());
+					m_player->Damege();
+				}
+
+			}
+		}
+
+		for (int i = 0; i < cpyMax; i++)
+		{
+			for (int j = 0; j < MaxBullet; j++)
+			{
+				if (m_copyenemy[i]->GetMflg() && m_Bullet[j]->GetMflg() && m_copyenemy[i]->BulletHit(m_Bullet[j]->Getpos()))
+				{
+					m_Bullet[j]->HitEnemy();
+					switch (m_copyenemy[i]->CheckColor(m_Bullet[j]->Getbcn()))
+					{
+					case 0:
+						Edmecut(m_copyenemy[i]->Getpos());
+						break;
+					case 10:
+						m_score->ScoreUp();
+						Circle(m_copyenemy[i]->Getpos(), m_Bullet[j]->Getbcn());
+						m_copyenemy[i]->Kill();
+						break;
+					default:
+						break;
+					}
+				}
+			}
+		}
+
+		for (int i = 0; i < cpyMax; i++)
+		{
+			if (m_copyenemy[i]->GetMflg())
+			{
+				if (m_player->EnemyHit(m_copyenemy[i]->Getpos()))
+				{
+					m_damage->App(m_player->Getpos());
+					m_player->Damege();
+				}
+
+			}
 		}
 	}
 
@@ -344,11 +406,13 @@ void C_GamePlay::Update()
 	// エフェクト,UI
 	//==============================
 	m_heart->Update();
+	m_heart->DownAlpha(m_player->Getpos());
 	m_dying->UpdateDying();
 	m_pcc->Update();
-	m_timer->Update();
 	m_score->Update();
 	m_damage->Update();
+	m_selectkey->Update();
+	m_selectkey->DownAlpha(m_player->Getpos());
 
 	for(auto& i: m_edmecut)
 	{
@@ -360,11 +424,7 @@ void C_GamePlay::Update()
 		i->Update();
 	}
 
-	if (m_timer->GetFinish() || !m_player->GetMflg())
-	{
-		score_tmp = m_score->GetScore();
-		Timeup = true;
-	}
+	
 
 	m_scaleMat = Math::Matrix::CreateScale(1, 1, 0);
 	m_transMat = Math::Matrix::CreateTranslation(Backgroundpos.x, Backgroundpos.y, 0);
@@ -381,6 +441,11 @@ void C_GamePlay::Draw2D()
 
 	// 背景描画
 	SHADER.m_spriteShader.DrawTex(&m_backgroundTex, rect, 1.0f);
+
+	m_heart->Draw2D(m_player->GetHp());
+	m_score->Draw2D();
+	m_selectkey->Draw();
+	m_timer->Draw2D();
 
 	// 弾描画
 	for (int i = 0; i < MaxBullet; i++)
@@ -401,19 +466,19 @@ void C_GamePlay::Draw2D()
 		m_copyenemy[i]->Draw2D();
 	}
 
-	m_heart->Draw2D(m_player->GetHp());
 	if(m_player->GetHp() <= 1)
 	{
 		m_dying->DrawDying();
 	}
 	m_pcc->Draw2D();
-	m_timer->Draw2D();
 	for (auto& i : m_circle)
 	{
 		i->Draw2D();
 	}
-	m_score->Draw2D();
 	m_damage->Draw();
+	m_countdown->Draw2D();
+	m_text->Draw2D();
+
 	for (auto& i : m_edmecut)
 	{
 		i->Draw();
@@ -436,7 +501,9 @@ void C_GamePlay::Reset()
 	m_timer = nullptr;
 	m_score = nullptr;
 	m_damage = nullptr;
-	
+	m_selectkey = nullptr;
+	m_countdown = nullptr;
+	m_text = nullptr;
 
 	// 敵リスト（vector）
 	m_enemyList.clear();
@@ -471,6 +538,7 @@ void C_GamePlay::Reset()
 	score_tmp = 0;
 
 	Timeup = false;
+	NextScene = false;
 }
 
 void C_GamePlay::Circle(Math::Vector2 p_pos, int a)

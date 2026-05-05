@@ -3,13 +3,34 @@
 void C_Timer::Init()
 {
 	m_tex.Load("Texture/Digit.png");
-	m_totalTime = 120; // ← 2分（120秒）
+	m_totalTime = 20; // ← 2分（120秒）
 	m_isFinish = false;
 	m_frameCnt = 0;
+	Alpha = 1.0f;
+
+	// 表示用に変換
+	ConvertTime(m_totalTime);
+	SetDigits();
+
+	// 行列更新（そのままでOK）
+	for (int i = 0; i < MAX_DIGITS; ++i)
+	{
+		m_pos[i].x = -380 + (i * 128 * 0.3f);
+		m_pos[i].y = 320;
+		Math::Matrix scale = Math::Matrix::CreateScale(m_scale.x, m_scale.y, 1);
+		Math::Matrix trans = Math::Matrix::CreateTranslation(m_pos[i].x, m_pos[i].y, 0);
+
+		m_mat[i] = scale * trans;
+	}
 }
 
 void C_Timer::Update()
 {
+	if (Alpha <= 1.0f)
+	{
+		Alpha += 0.02f;
+	}
+
 	if (m_isFinish) return;
 
 	m_frameCnt++;
@@ -19,7 +40,7 @@ void C_Timer::Update()
 	{
 		m_frameCnt = 0;
 
-		if (m_totalTime > 0)
+		if (m_totalTime > 1)
 		{
 			m_totalTime--;
 		}
@@ -95,7 +116,20 @@ void C_Timer::Draw2D()
 		}
 
 		SHADER.m_spriteShader.SetMatrix(m_mat[i]);
-		SHADER.m_spriteShader.DrawTex(&m_tex, m_rect, 1.0f);
+		SHADER.m_spriteShader.DrawTex(&m_tex, m_rect, Alpha);
+	}
+}
+
+void C_Timer::DownAlpha(Math::Vector2 p_pos)
+{
+	const float x = (m_pos[2].x - p_pos.x) * 0.5f; // 横だけ縮める
+	const float y = m_pos[2].y - p_pos.y;
+
+	const float z = sqrt(x * x + y * y);
+
+	if (z < 64)
+	{
+		Alpha = 0.1f;
 	}
 }
 

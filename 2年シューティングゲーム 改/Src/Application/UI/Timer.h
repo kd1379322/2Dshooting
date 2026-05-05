@@ -10,11 +10,17 @@ public:
 	void Update();			// 秒を受け取る
 	void Draw2D();          // 描画
 
+	void DownAlpha(Math::Vector2 p_pos);
+
 	bool GetFinish() { return m_isFinish; }
+
+	int GettotalTime() { return m_totalTime; }
 
 private:
 
 	void Release();
+
+	float Alpha = 1.0f;
 
 	// ===== 時間 =====
 	int m_minutes = 0;
