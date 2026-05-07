@@ -4,6 +4,7 @@
 #include "GameProgress/GamePlay.h"
 #include "GameProgress/Result.h"
 #include "UI/Mosaic.h"
+#include"Sound/Sound.h"
 
 void Scene::Draw2D()
 {
@@ -39,7 +40,18 @@ void Scene::Update()
 			{
 				m_mosaic->Up();
 				Spacekeyflg = true;
+
+				// ‚Ü‚¾‰¹‚ð–Â‚ç‚µ‚Ä‚¢‚È‚¢Žž‚¾‚¯
+				if (!SoundPlayed)
+				{
+					SOUND.DecisionSound_SE();
+					SoundPlayed = true;
+				}
 			}
+		}
+		else
+		{
+			Spacekeyflg = false;
 		}
 		
 
@@ -48,24 +60,22 @@ void Scene::Update()
 			nowScene = GamePlay;
 			m_GamePlay->Reset();
 			m_GamePlay->Init();
+			SOUND.Game_BGM();
 			m_mosaic->Down();
+			SoundPlayed = false;
 		}
-		else
-		{
-			Spacekeyflg = false;
-		}
+		
 
 		break;
 	case GamePlay:
 		m_GamePlay->Update();
 		if (m_GamePlay->GetResultGo_T())
 		{
-			if (!Spacekeyflg)
-			{
-				m_Result->SetScore(m_GamePlay->GetRastScore());
-				m_mosaic->Up();
-				Spacekeyflg = true;
-			}
+			
+			m_Result->SetScore(m_GamePlay->GetRastScore());
+			m_mosaic->Up();
+			Spacekeyflg = true;
+			
 		}
 
 		if (m_mosaic->GetMax_A())
@@ -73,12 +83,9 @@ void Scene::Update()
 			m_mosaic->Down();
 			nowScene = Result;
 			m_Result->Init();
+			SOUND.Result_BGM();
 		}
-		else
-		{
-			Spacekeyflg = false;
-		}
-
+		
 		break;
 	case Result:
 		m_Result->Update();
@@ -88,20 +95,28 @@ void Scene::Update()
 			{
 				m_mosaic->Up();
 				Spacekeyflg = true;
+				// ‚Ü‚¾‰¹‚ð–Â‚ç‚µ‚Ä‚¢‚È‚¢Žž‚¾‚¯
+				if (!SoundPlayed)
+				{
+					SOUND.DecisionSound_SE();
+					SoundPlayed = true;
+				}
 			}
-		}
-
-
-		if (m_mosaic->GetMax_A())
-		{
-			nowScene = Title;
-			m_Title->Init();
-			m_mosaic->Down();
 		}
 		else
 		{
 			Spacekeyflg = false;
 		}
+
+		if (m_mosaic->GetMax_A())
+		{
+			nowScene = Title;
+			m_Title->Init();
+			SOUND.Title_BGM();
+			m_mosaic->Down();
+			SoundPlayed = false;
+		}
+	
 		break;
 	default:
 		break;
@@ -120,6 +135,8 @@ void Scene::Init()
 	m_Title->Init();
 	m_mosaic->Init();
 	m_mosaic->Down();
+	SOUND.Init();
+	SOUND.Title_BGM();
 	Spacekeyflg = false;
 }
 

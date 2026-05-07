@@ -10,6 +10,8 @@ public:
 	void Update();			// 更新
 	void Draw2D();          // 描画
 
+	void DownAlpha(Math::Vector2 p_pos);
+
 	void ScoreUp();
 	int GetScore() { return m_score; }
 	int GetCombo() { return m_combo; }
@@ -22,6 +24,8 @@ private:
 	int m_combo_cnt = 0;
 
 	bool m_comboflg = false;
+
+	float Alpha = 1.0f;
 
 	// ===== 表示 =====
 	static const int MAX_DIGITS = 10; 

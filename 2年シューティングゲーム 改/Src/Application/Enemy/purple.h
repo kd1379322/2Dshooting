@@ -18,7 +18,7 @@ public:
 
 
 private:
-	float m_moveSpeedY = 4.0f;
+	float m_moveSpeedY = 16.0f;
 	float m_moveSpeedX = -12.0f;
 };
 

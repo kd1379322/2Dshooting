@@ -72,6 +72,7 @@ private:
 	std::shared_ptr<C_Player> m_player = nullptr;
 
 	std::vector<std::shared_ptr<C_EnemyBase>> m_enemyList;
+	std::vector<std::shared_ptr<C_EnemyBase>> m_multi_enemyList;
 
 	static const int cpyMax = 15;
 	std::shared_ptr<C_EnemyBase> m_copyenemy[cpyMax] = {nullptr};

@@ -1,15 +1,22 @@
 #include "Player.h"
-
+#include"../Sound/Sound.h"
 
 void C_Player::Init()
 {
 	m_Tex.Load("Texture/player.png");
+	m_f_Tex.Load("Texture/engin.png");
 
 	Moveflg = true;
 	playerAlpha = 1.0f;
 	Hp = MHp;
 	m_pos = { -300,0 };
-	
+	m_fpos = { m_pos.x - 50,m_pos.y };
+
+	m_transMat = Math::Matrix::CreateTranslation(m_fpos.x, m_fpos.y, 0);
+	m_scaleMat = Math::Matrix::CreateScale(3, 3, 0);
+	m_rotationMat = Math::Matrix::CreateRotationZ(DirectX::XMConvertToRadians(0));
+	m_fmat = m_scaleMat * m_rotationMat * m_transMat;
+
 	m_transMat		= Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
 	m_scaleMat		= Math::Matrix::CreateScale(1, 1, 0);
 	m_rotationMat	= Math::Matrix::CreateRotationZ(DirectX::XMConvertToRadians(0));
@@ -68,7 +75,21 @@ void C_Player::Update()
 			DamegeIframes = false;
 		}
 	}
-	
+
+	//アニメーション処理
+	m_anime += 0.5f;
+	if (m_anime >= 6)
+	{
+		m_anime = 0;
+	}
+
+	m_fpos = { m_pos.x - 50,m_pos.y };
+
+
+	m_transMat = Math::Matrix::CreateTranslation(m_fpos.x, m_fpos.y, 0);
+	m_scaleMat = Math::Matrix::CreateScale(3, 3, 0);
+	m_rotationMat = Math::Matrix::CreateRotationZ(DirectX::XMConvertToRadians(0));
+	m_fmat = m_scaleMat * m_rotationMat * m_transMat;
 
 	m_transMat		= Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
 	m_scaleMat		= Math::Matrix::CreateScale(1, 1, 0);
@@ -79,6 +100,11 @@ void C_Player::Update()
 void C_Player::Draw2D(int i)
 {
 	if (!Moveflg)return;
+	int boostAnime[6] = { 0,16,32,64,32,16 };
+
+	f_rect= { boostAnime[(int)m_anime],0,16,16 };
+	SHADER.m_spriteShader.SetMatrix(m_fmat);//行列のセット
+	SHADER.m_spriteShader.DrawTex(&m_f_Tex, f_rect, playerAlpha);//画像の描画
 
 	switch (i)
 	{
@@ -95,7 +121,6 @@ void C_Player::Draw2D(int i)
 		rect = { 0,0,64,64 };
 		break;
 	}
-	
 
 	//プレイヤーの描画
 	SHADER.m_spriteShader.SetMatrix(m_mat);//行列のセット
@@ -125,7 +150,23 @@ bool C_Player::EnemyHit(Math::Vector2 p_pos)
 
 void C_Player::Damege()
 {
+	SOUND.PlayerDamage_SE();
 	Hp -= 1;
 	DamegeIframes = true;
-	if (Hp == 0)Moveflg = false;
+	if (Hp == 1)
+	{
+		SOUND.Hinsi_SE();
+	}
+
+	if (Hp == 0)
+	{
+		SOUND.AllSoundStop();
+		Moveflg = false;
+	}
+}
+
+void C_Player::Relese()
+{
+	m_Tex.Release();
+	m_f_Tex.Release();
 }

@@ -58,6 +58,9 @@
     <Filter Include="Src\Application\UI">
       <UniqueIdentifier>{125f0a8b-bcb0-4a8b-94e1-cc43c2e35f3b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Application\Sound">
+      <UniqueIdentifier>{1b257a55-8820-4a3e-b016-162f3d3c04c9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Pch.h">
@@ -228,6 +231,9 @@
     <ClInclude Include="Src\Application\UI\Text.h">
       <Filter>Src\Application\UI</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Application\Sound\Sound.h">
+      <Filter>Src\Application\Sound</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -367,6 +373,9 @@
     </ClCompile>
     <ClCompile Include="Src\Application\UI\Text.cpp">
       <Filter>Src\Application\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Sound\Sound.cpp">
+      <Filter>Src\Application\Sound</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

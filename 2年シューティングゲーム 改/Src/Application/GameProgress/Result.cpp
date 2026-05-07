@@ -1,4 +1,6 @@
 #include "Result.h"
+#include"../Sound/Sound.h"
+
 
 void C_Result::Init()
 {
@@ -37,6 +39,8 @@ void C_Result::Update()
 		// --- カウントアップ ---
 		if (m_dispScore < m_score)
 		{
+			SOUND.drum_SE();
+
 			int add = (m_score - m_dispScore) / 10;
 
 			if (add < 100)
@@ -49,9 +53,16 @@ void C_Result::Update()
 			if (m_dispScore > m_score)
 			{
 				m_dispScore = m_score;
+				
+			}
+
+			if (m_dispScore == m_score)
+			{
+				SOUND.LevelUp_SE();
 			}
 		}
 	}
+
 
 	t_Alpha += t_alphaAdd;
 
@@ -137,31 +148,31 @@ void C_Result::Draw2D()
 		SHADER.m_spriteShader.DrawTex(&m_numtex, m_rect, 1.0f);
 	}
 
-	if (m_dispScore < 10000)
+	if (m_dispScore < 50000)
 	{
 		rect = { 690,220,230,210 };//E
 	}
-	else if (m_dispScore < 50000)
+	else if (m_dispScore < 100000)
 	{
 		rect = { 460,220,230,210 };//D
 	}
-	else if (m_dispScore < 100000)
+	else if (m_dispScore < 300000)
 	{
 		rect = { 230,220,230,210 }; //C
 	}
-	else if (m_dispScore < 150000)
+	else if (m_dispScore < 500000)
 	{
 		rect = { 0,220,230,210 }; //B
 	}
-	else if (m_dispScore < 200000)
+	else if (m_dispScore < 800000)
 	{
 		rect = { 690,0,230,210 };  //A
 	}
-	else if (m_dispScore < 250000)
+	else if (m_dispScore < 1000000)
 	{
 		rect = { 460,0,230,210 };	//A+
 	}
-	else if (m_dispScore < 300000)
+	else if (m_dispScore < 1500000)
 	{
 		rect = { 230,0,230,210 };	//S
 	}

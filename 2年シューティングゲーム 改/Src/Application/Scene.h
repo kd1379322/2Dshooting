@@ -1,6 +1,7 @@
 #pragma once
 
 
+
 class C_Title;
 
 class C_GamePlay;
@@ -8,6 +9,8 @@ class C_GamePlay;
 class C_Result;
 
 class C_Mosaic;
+
+
 
 enum SceneType
 {
@@ -28,6 +31,8 @@ private:
 	std::shared_ptr<C_Result>		m_Result;
 
 	std::shared_ptr<C_Mosaic>		m_mosaic;
+
+	bool SoundPlayed = false;
 
 public:
 

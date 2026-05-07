@@ -17,13 +17,18 @@ void C_Purple::Update()
 {
 	if (!Moveflg)return;
 
-	m_pos.x += m_moveSpeedX;
-	m_pos.y += m_moveSpeedY;
+	
 
 	if (anm % 60 == 0)
 	{
-		m_moveSpeedY *= -1;
+		
+
 	}
+
+	Math::Vector2 enemyMove = m_playerpos - m_pos;
+	enemyMove.Normalize();
+	m_pos.y += enemyMove.y * m_moveSpeedY;
+	m_pos.x += m_moveSpeedX;
 
 	if (m_pos.x < ScreenLeft - Size)
 	{

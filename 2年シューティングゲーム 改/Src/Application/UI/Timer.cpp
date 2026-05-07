@@ -3,7 +3,7 @@
 void C_Timer::Init()
 {
 	m_tex.Load("Texture/Digit.png");
-	m_totalTime = 20; // ← 2分（120秒）
+	m_totalTime = 10; // ← 2分（120秒）
 	m_isFinish = false;
 	m_frameCnt = 0;
 	Alpha = 1.0f;

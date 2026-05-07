@@ -35,7 +35,9 @@ public:
 
 	Math::Vector2 Getpos() { return m_pos; }
 
-	void Kill() { Moveflg = false; }
+	void Kill();
+
+	void SetPpos(Math::Vector2 p_pos) { m_playerpos = p_pos; }
 
 protected:
 
@@ -57,6 +59,7 @@ protected:
 	KdTexture m_Tex;			//画像用	
 
 	Math::Vector2 m_pos = {704,0};		//座標
+	Math::Vector2 m_playerpos = {0,0};		//座標
 
 	Math::Matrix m_transMat;	//移動行列
 	Math::Matrix m_scaleMat;	//拡大行列

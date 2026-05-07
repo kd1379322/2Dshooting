@@ -4,13 +4,13 @@
 #include "../Efect/damage.h"
 #include "../Efect/edmecut.h"
 #include"../Player/Player.h"
+#include"../Player/Bullet.h"
 #include"../Enemy/Red.h"
 #include"../Enemy/Blue.h"
 #include"../Enemy/Yellow.h"
 #include"../Enemy/green.h"
 #include"../Enemy/orange.h"
 #include"../Enemy/purple.h"
-#include"../Player/Bullet.h"
 #include"../UI/Heart.h"
 #include"../UI/Dying.h"
 #include"../UI/Timer.h"
@@ -18,6 +18,7 @@
 #include"../UI/Selectkey.h"
 #include"../UI/Countdown.h"
 #include"../UI/Text.h"
+#include"../Sound/Sound.h"
 
 
 void C_GamePlay::Init()
@@ -39,17 +40,25 @@ void C_GamePlay::Init()
 	for (int i = 0; i < 3; ++i)m_enemyList.push_back(std::make_shared<C_Red>());
 	for (int i = 0; i < 3; ++i)m_enemyList.push_back(std::make_shared<C_Blue>());
 	for (int i = 0; i < 3; ++i)m_enemyList.push_back(std::make_shared<C_Yellow>());
-	for (int i = 0; i < 3; ++i)m_enemyList.push_back(std::make_shared<C_Green>());
+	/*for (int i = 0; i < 3; ++i)m_enemyList.push_back(std::make_shared<C_Green>());
 	for (int i = 0; i < 3; ++i)m_enemyList.push_back(std::make_shared<C_Orange>());
-	for (int i = 0; i < 3; ++i)m_enemyList.push_back(std::make_shared<C_Purple>());
+	for (int i = 0; i < 3; ++i)m_enemyList.push_back(std::make_shared<C_Purple>());*/
 
-	
+	for (int i = 0; i < 3; ++i)m_multi_enemyList.push_back(std::make_shared<C_Green>());
+	for (int i = 0; i < 3; ++i)m_multi_enemyList.push_back(std::make_shared<C_Orange>());
+	for (int i = 0; i < 3; ++i)m_multi_enemyList.push_back(std::make_shared<C_Purple>());
 
 	for (auto& e : m_enemyList)
 	{
 		e->Init();
+		e->SetPpos(m_player->Getpos());
 	}
 
+	for (auto& e : m_multi_enemyList)
+	{
+		e->Init();
+		e->SetPpos(m_player->Getpos());
+	}
 	
 	for (int i = 0; i < 5; i++)
 	{
@@ -127,9 +136,15 @@ void C_GamePlay::Update()
 	if (m_waitCnt <= 240)
 	{
 		m_waitCnt++;
-		if (m_waitCnt == 60 || m_waitCnt == 120 || m_waitCnt == 180 || m_waitCnt == 240)
+		if (m_waitCnt == 60 || m_waitCnt == 120 || m_waitCnt == 180)
 		{
 			m_countdown->App();
+			SOUND.CountDown1_SE();
+		}
+		else if (m_waitCnt == 240)
+		{
+			m_countdown->App();
+			SOUND.CountDown2_SE();
 		}
 
 	}
@@ -152,17 +167,35 @@ void C_GamePlay::Update()
 
 		if (m_timer->GettotalTime() <= 3 && m_timer->GettotalTime() >= 1)
 		{
-			// 同じ処理
 			m_countdown->E_App(m_timer->GettotalTime());
-
 		}
 
-		if (m_timer->GetFinish() || !m_player->GetMflg())
+		if (m_timer->GettotalTime() == 60)
+		{
+			m_text->Limit60();
+		}
+
+		if (m_timer->GettotalTime() == 30)
+		{
+			m_text->Limit30();
+		}
+
+
+		if (m_timer->GetFinish())
 		{
 			score_tmp = m_score->GetScore();
 			m_text->TimeUpApp();
 			Timeup = true;
 		}
+
+		if (!m_player->GetMflg())
+		{
+			score_tmp = m_score->GetScore();
+			m_text->GameoverApp();
+			Timeup = true;
+
+		}
+
 
 		//==============================
 		// 乱数生成
@@ -182,6 +215,21 @@ void C_GamePlay::Update()
 			}
 		}
 
+		if(m_timer->GettotalTime() <= 60)
+		{
+			static std::random_device rd2;
+			static std::mt19937 gen2(rd2());
+			std::uniform_int_distribution<int> dist2(0, 999); // 1000分の1
+
+			for (auto& e : m_multi_enemyList)
+			{
+				if (dist2(gen2) == 0 && !e->GetMflg())
+				{
+					e->App();
+				}
+			}
+		}
+
 		//==============================
 		// 更新
 		//==============================
@@ -189,6 +237,13 @@ void C_GamePlay::Update()
 		for (auto& e : m_enemyList)
 		{
 			e->Update();
+			e->SetPpos(m_player->Getpos());
+		}
+
+		for (auto& e : m_multi_enemyList)
+		{
+			e->Update();
+			e->SetPpos(m_player->Getpos());
 		}
 
 		for (int i = 0; i < cpyMax; i++)
@@ -237,6 +292,7 @@ void C_GamePlay::Update()
 		prevZ = nowZ;
 		prevX = nowX;
 		prevC = nowC;
+
 		//==============================
 		// 弾発射
 		//==============================
@@ -273,7 +329,6 @@ void C_GamePlay::Update()
 		//==============================
 		for (auto& e : m_enemyList)
 		{
-
 			//弾
 			for (int i = 0; i < MaxBullet; i++)
 			{
@@ -336,9 +391,72 @@ void C_GamePlay::Update()
 
 				}
 			}
+		}
 
+		for (auto& e : m_multi_enemyList)
+		{
+			//弾
+			for (int i = 0; i < MaxBullet; i++)
+			{
+				if (e->GetMflg() && m_Bullet[i]->GetMflg() && e->BulletHit(m_Bullet[i]->Getpos()))
+				{
+					m_Bullet[i]->HitEnemy();
 
+					switch (e->CheckColor(m_Bullet[i]->Getbcn()))
+					{
+					case 0:
+						Edmecut(e->Getpos());
+						break;
+					case 1:
+						m_score->ScoreUp();
+						Circle(e->Getpos(), m_Bullet[i]->Getbcn());
+						e->Kill();
+						for (int j = 0; j < 5; j++)
+						{
+							if (!m_copyenemy[j]->GetMflg())
+							{
+								m_copyenemy[j]->PosApp(e->Getpos());
+								break;
+							}
+						}
+						break;
+					case 2:
+						m_score->ScoreUp();
+						Circle(e->Getpos(), m_Bullet[i]->Getbcn());
+						e->Kill();
+						for (int j = 5; j < 10; j++)
+						{
+							if (!m_copyenemy[j]->GetMflg())
+							{
+								m_copyenemy[j]->PosApp(e->Getpos());
+								break;
+							}
+						}
+						break;
+					case 3:
+						m_score->ScoreUp();
+						Circle(e->Getpos(), m_Bullet[i]->Getbcn());
+						e->Kill();
+						for (int j = 10; j < 15; j++)
+						{
+							if (!m_copyenemy[j]->GetMflg())
+							{
+								m_copyenemy[j]->PosApp(e->Getpos());
+								break;
+							}
+						}
+						break;
+					case 10:
+						m_score->ScoreUp();
+						Circle(e->Getpos(), m_Bullet[i]->Getbcn());
+						e->Kill();
+						break;
+					default:
+						break;
+					}
 
+				}
+			}
 		}
 
 		for (auto& e : m_enemyList)
@@ -350,6 +468,22 @@ void C_GamePlay::Update()
 				{
 					m_damage->App(m_player->Getpos());
 					m_player->Damege();
+					if (m_player->GetHp() <= 1)m_text->RemStamina1();
+				}
+
+			}
+		}
+
+		for (auto& e : m_multi_enemyList)
+		{
+			//敵と自機の当たり判定
+			if (e->GetMflg())
+			{
+				if (m_player->EnemyHit(e->Getpos()))
+				{
+					m_damage->App(m_player->Getpos());
+					m_player->Damege();
+					if (m_player->GetHp() <= 1)m_text->RemStamina1();
 				}
 
 			}
@@ -387,6 +521,7 @@ void C_GamePlay::Update()
 				{
 					m_damage->App(m_player->Getpos());
 					m_player->Damege();
+					if (m_player->GetHp() <= 1)m_text->RemStamina1();
 				}
 
 			}
@@ -444,6 +579,7 @@ void C_GamePlay::Draw2D()
 
 	m_heart->Draw2D(m_player->GetHp());
 	m_score->Draw2D();
+	m_score->DownAlpha(m_player->Getpos());
 	m_selectkey->Draw();
 	m_timer->Draw2D();
 
@@ -457,6 +593,11 @@ void C_GamePlay::Draw2D()
 	m_player->Draw2D(BulletColorNumber);
 
 	for (auto& e : m_enemyList)
+	{
+		e->Draw2D();
+	}
+
+	for (auto& e : m_multi_enemyList)
 	{
 		e->Draw2D();
 	}
@@ -507,6 +648,7 @@ void C_GamePlay::Reset()
 
 	// 敵リスト（vector）
 	m_enemyList.clear();
+	m_multi_enemyList.clear();
 
 	// 配列系
 	for (int i = 0; i < MaxBullet; i++)

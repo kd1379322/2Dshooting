@@ -19,9 +19,13 @@ private:
 	int cnt = 0;
 	int e_cnt = 0;
 
+
+
 	float Alpha = 0.0f;
 
 	bool Moveflg = false;
+
+	bool Prerep = false;
 
 	Math::Rectangle rect = { 0,0,80,150 };
 

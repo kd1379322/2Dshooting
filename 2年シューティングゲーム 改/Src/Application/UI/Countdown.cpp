@@ -4,6 +4,7 @@ void C_Countdown::Init()
 {
 	m_tex.Load("Texture/Countdown.png");
 	Moveflg = false;
+	Prerep = false;
 	Alpha = 0.0f;
 	cnt = 0;
 	e_cnt = 0;
@@ -16,7 +17,16 @@ void C_Countdown::Update()
 {
 	if (!Moveflg)return;
 
-	//m_pos.y += 0.2f;
+	if(Prerep)
+	{
+		e_cnt++;
+		if (e_cnt >= 60) {
+			e_cnt = 0;
+			Prerep = false;
+		}
+	}
+
+	m_scale += {0.1f,0.1f};
 	Alpha -= 0.03f;
 	if (Alpha <= 0.0f)
 	{
@@ -84,12 +94,18 @@ void C_Countdown::App()
 
 void C_Countdown::E_App(int i)
 {
-	Alpha = 1.0f;
-	m_scale = { 1,1 };
+	if(!Prerep)
+	{
+		e_cnt = 0;
+		Alpha = 1.0f;
+		m_scale = { 1,1 };
+		Prerep = true;
+	}
 
 	m_scaleMat = Math::Matrix::CreateScale(m_scale.x, m_scale.y, 0);
 	m_transMat = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
 	m_mat = m_scaleMat * m_transMat;
+
 
 	switch (i)
 	{	

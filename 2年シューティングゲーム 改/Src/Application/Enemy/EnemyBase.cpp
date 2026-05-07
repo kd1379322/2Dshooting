@@ -1,4 +1,5 @@
 #include "EnemyBase.h"
+#include"../Sound/Sound.h"
 
 void C_EnemyBase::Init()
 {
@@ -80,6 +81,12 @@ bool C_EnemyBase::BulletHit(Math::Vector2 p_pos)
 int C_EnemyBase::CheckColor(int i)
 {
 	return false;
+}
+
+void C_EnemyBase::Kill()
+{
+	SOUND.EnemyDamage_SE();
+	Moveflg = false;
 }
 
 void C_EnemyBase::Release()

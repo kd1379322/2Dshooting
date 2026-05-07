@@ -10,6 +10,12 @@ void C_Score::Init()
 
 void C_Score::Update()
 {
+	if (Alpha <= 1.0f)
+	{
+		Alpha += 0.02f;
+	}
+
+
 	if (m_comboflg)
 	{
 		m_combo_cnt++;
@@ -57,7 +63,20 @@ void C_Score::Draw2D()
 		}
 
 		SHADER.m_spriteShader.SetMatrix(m_mat[i]);
-		SHADER.m_spriteShader.DrawTex(&m_tex, m_rect, 1.0f);
+		SHADER.m_spriteShader.DrawTex(&m_tex, m_rect, Alpha);
+	}
+}
+
+void C_Score::DownAlpha(Math::Vector2 p_pos)
+{
+	const float x = (m_pos[5].x - p_pos.x) * 0.25f; // 横だけ縮める
+	const float y = m_pos[5].y - p_pos.y;
+
+	const float z = sqrt(x * x + y * y);
+
+	if (z < 64)
+	{
+		Alpha = 0.1f;
 	}
 }
 
@@ -75,9 +94,25 @@ void C_Score::ScoreUp()
 	{
 		m_score += 500;
 	}
-	else if (m_combo >= 20)
+	else if (m_combo < 20)
 	{
 		m_score += 1000;
+	}
+	else if (m_combo < 30)
+	{
+		m_score += 2000;
+	}
+	else if (m_combo < 40)
+	{
+		m_score += 3000;
+	}
+	else if (m_combo < 50)
+	{
+		m_score += 4000;
+	}
+	else if (m_combo >= 50)
+	{
+		m_score += 5000;
 	}
 
 	m_combo++;
