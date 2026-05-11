@@ -18,13 +18,6 @@ void C_Purple::Update()
 	if (!Moveflg)return;
 
 	
-
-	if (anm % 60 == 0)
-	{
-		
-
-	}
-
 	Math::Vector2 enemyMove = m_playerpos - m_pos;
 	enemyMove.Normalize();
 	m_pos.y += enemyMove.y * m_moveSpeedY;
@@ -36,6 +29,7 @@ void C_Purple::Update()
 	}
 
 	anm++;
+
 	if (anm == 30) {
 		rect = { 64,0,64,64 };
 	}

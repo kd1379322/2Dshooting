@@ -249,6 +249,11 @@ void C_GamePlay::Update(bool p_diff)
 						}
 					}
 				}
+
+				if (GetAsyncKeyState('I') & 0x8000) {
+
+					m_timer->SkipTimer();
+				}
 			}
 
 			if(Debug)
@@ -276,7 +281,7 @@ void C_GamePlay::Update(bool p_diff)
 				}
 				if (GetAsyncKeyState('Y') & 0x8000)
 				{
-					m_copyenemy[25]->PosApp({ ScreenRight + Size,100 });
+					m_copyenemy[26]->PosApp({ ScreenRight + Size,100 });
 				}
 				if (GetAsyncKeyState('U') & 0x8000)
 				{
@@ -334,6 +339,7 @@ void C_GamePlay::Update(bool p_diff)
 		for (int i = 0; i < cpyMax; i++)
 		{
 			m_copyenemy[i]->Update();
+			m_copyenemy[i]->SetPpos(m_player->Getpos());
 		}
 
 		for (int i = 0; i < MaxBullet; i++) m_Bullet[i]->Update();
@@ -355,6 +361,7 @@ void C_GamePlay::Update(bool p_diff)
 		{
 			if (BulletColorNumber != 1) {
 				BulletColorNumber = 1;
+				SOUND.Chenge_SE();
 				m_pcc->App(m_player->Getpos(), BulletColorNumber);
 			}
 		}
@@ -362,6 +369,7 @@ void C_GamePlay::Update(bool p_diff)
 		{
 			if (BulletColorNumber != 2) {
 				BulletColorNumber = 2;
+				SOUND.Chenge_SE();
 				m_pcc->App(m_player->Getpos(), BulletColorNumber);
 			}
 		}
@@ -369,6 +377,7 @@ void C_GamePlay::Update(bool p_diff)
 		{
 			if (BulletColorNumber != 3) {
 				BulletColorNumber = 3;
+				SOUND.Chenge_SE();
 				m_pcc->App(m_player->Getpos(), BulletColorNumber);
 			}
 		}

@@ -4,7 +4,7 @@ void C_Sound::Init()
 {
 	//音量初期値
 	Bgmvol = 0.05f;	// MAXは 1.0f
-	Sevol = 0.5f;   // MAXは 1.0f
+	Sevol = 0.2f;   // MAXは 1.0f
 
 	//タイトルBGMの読み込み
     //①容量確保
@@ -154,6 +154,17 @@ void C_Sound::Init()
 	finish_seInst = finish_se->CreateInstance(false);
 
 	finish_seInst->SetVolume(Sevol);
+
+
+	//機体の色チェンジ
+	Chenge_se = std::make_shared<KdSoundEffect>();
+
+	Chenge_se->Load("Sound/Chenge.wav");
+	
+	Chenge_seInst = Chenge_se->CreateInstance(false);
+	
+	Chenge_seInst->SetVolume(Sevol);
+
 }
 
 //ゲームBGM
@@ -275,6 +286,11 @@ void C_Sound::Start_SE()
 void C_Sound::Finish_SE()
 {
 	finish_seInst->Play();
+}
+
+void C_Sound::Chenge_SE()
+{
+	Chenge_seInst->Play();
 }
 
 

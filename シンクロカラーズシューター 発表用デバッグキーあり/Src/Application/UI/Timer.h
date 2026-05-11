@@ -20,7 +20,12 @@ public:
 
 	void StartTimer() {
 		stop = false;
-		m_totalTime = 80;
+		m_totalTime = 70;
+		m_frameCnt = 0;
+	}
+
+	void SkipTimer() {
+		m_totalTime = 10;
 		m_frameCnt = 0;
 	}
 

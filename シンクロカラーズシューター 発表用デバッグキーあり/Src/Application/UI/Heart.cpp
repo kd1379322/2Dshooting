@@ -2,13 +2,13 @@
 
 void C_Heart::Init()
 {
-	m_tex.Load("Texture/Heart.png");
+	m_tex.Load("Texture/player.png");
 
 	animcnt = 0;
 	Alpha = 1.0f;
 	for(int i = 0;i<3;i++)
 	{
-		m_scale[i] = {4,4};
+		m_scale[i] = {0.8f,0.8f};
 		m_pos[i].x = -600 + (i * 64);
 		m_pos[i].y = 320;
 
@@ -44,17 +44,17 @@ void C_Heart::Draw2D(int hp)
 		if (i < hp)
 		{
 			// 満タンハート
-			rect = { 0, 0, 13, 12 };
-
+			rect = { 0, 0, 64, 64 };
+			SHADER.m_spriteShader.SetMatrix(m_mat[i]);
+			SHADER.m_spriteShader.DrawTex(&m_tex, rect, Alpha);
 		}
 		else
 		{
 			// 空ハート
-			rect = { 32, 0, 13, 12 };
+			//rect = { 32, 0, 13, 12 };
 		}
 
-		SHADER.m_spriteShader.SetMatrix(m_mat[i]);
-		SHADER.m_spriteShader.DrawTex(&m_tex, rect, Alpha);
+	
 	}
 
 }

@@ -28,6 +28,8 @@ public:
 	void Start_SE();
 	void Finish_SE();
 
+	void Chenge_SE();
+
 	void AllSoundStop();           //‰¹‚ğˆêÄ‚É~‚ß‚é
 
 	//BGM
@@ -90,6 +92,11 @@ public:
 
 	std::shared_ptr<KdSoundEffect>		finish_se;
 	std::shared_ptr<KdSoundInstance>	finish_seInst;
+
+
+	std::shared_ptr<KdSoundEffect>		Chenge_se;
+	std::shared_ptr<KdSoundInstance>	Chenge_seInst;
+
 
 	float Bgmvol;
 	float Sevol;
