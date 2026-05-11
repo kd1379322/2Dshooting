@@ -215,39 +215,21 @@ void C_GamePlay::Update(bool p_diff)
 
 		if(!p_diff)
 		{
-			//==============================
-			// 乱数生成
-			//==============================
-			static std::random_device rd;
-			static std::mt19937 gen(rd());
-			std::uniform_int_distribution<int> dist(0, 499); // 500分の1
+		
 
 			//==============================
 			// 敵生成
 			//==============================
 			if(!Debug)
 			{
-				for (auto& e : m_enemyList)
-				{
-					if (dist(gen) == 0 && !e->GetMflg())
-					{
-						e->App();
-					}
-				}
 
+				EnemyApp(3,499,0,m_enemyList);
+				
 				if (m_timer->GettotalTime() <= 60)
 				{
-					static std::random_device rd2;
-					static std::mt19937 gen2(rd2());
-					std::uniform_int_distribution<int> dist2(0, 999); // 1000分の1
 
-					for (auto& e : m_multi_enemyList)
-					{
-						if (dist2(gen2) == 0 && !e->GetMflg())
-						{
-							e->App();
-						}
-					}
+					EnemyApp(1, 999,3, m_multi_enemyList);
+
 				}
 
 				if (GetAsyncKeyState('I') & 0x8000) {
@@ -293,31 +275,8 @@ void C_GamePlay::Update(bool p_diff)
 		else if(p_diff)   //ハードモード
 		{
 
-			//==============================
-			// 乱数生成
-			//==============================
-			static std::random_device rd;
-			static std::mt19937 gen(rd());
-			std::uniform_int_distribution<int> dist(0, 299); // 300分の1
-
-			//==============================
-			// 敵生成
-			//==============================
-			for (auto& e : m_enemyList)
-			{
-				if (dist(gen) == 0 && !e->GetMflg())
-				{
-					e->App();
-				}	
-			}
-
-			for (auto& e : m_multi_enemyList)
-			{
-				if (dist(gen) == 0 && !e->GetMflg())
-				{
-					e->App();
-				}
-			}
+			EnemyApp(5, 299,0,m_enemyList);
+			EnemyApp(3, 299,0,m_multi_enemyList);
 		}
 
 		//==============================
@@ -753,6 +712,94 @@ void C_GamePlay::ImGuiUpdate()
 {
 	ImGui::Text("GameC = %d", GameCnt);
 	m_player->ImGuiUpdate();
+}
+
+void C_GamePlay::EnemyApp(
+	int p_RespawnNum,
+	int p_dist,
+	int p_CheckSec,
+	std::vector<std::shared_ptr<C_EnemyBase>>& p_list)
+{
+	//==============================
+	// タイマー
+	//==============================
+	static int CheckCnt = 0;
+
+	//==============================
+	// 秒数判定
+	//==============================
+	if (p_CheckSec > 0)
+	{
+		CheckCnt++;
+
+		// 60FPS想定
+		if (CheckCnt < p_CheckSec * 60)
+		{
+			return;
+		}
+
+		CheckCnt = 0;
+	}
+
+	//==============================
+	// 乱数生成
+	//==============================
+	static std::random_device rd;
+	static std::mt19937 gen(rd());
+
+	std::uniform_int_distribution<int> spawnDist(0, p_dist);
+
+	//==============================
+	// 誰か出現しているか確認
+	//==============================
+	bool ExistEnemy = false;
+
+	for (auto& e : p_list)
+	{
+		if (e->GetMflg())
+		{
+			ExistEnemy = true;
+			break;
+		}
+	}
+
+	//==============================
+	// 全員いないなら必ず敵を出す
+	//==============================
+	if (!ExistEnemy)
+	{
+		std::uniform_int_distribution<int>
+			enemyDist(0, (int)p_list.size() - 1);
+
+		int SpawnCount = 0;
+
+		p_RespawnNum =
+			std::min(p_RespawnNum, (int)p_list.size());
+
+		while (SpawnCount < p_RespawnNum)
+		{
+			int index = enemyDist(gen);
+
+			if (!p_list[index]->GetMflg())
+			{
+				p_list[index]->App(p_list);
+				SpawnCount++;
+			}
+		}
+	}
+	else
+	{
+		//==============================
+		// 通常ランダム出現
+		//==============================
+		for (auto& e : p_list)
+		{
+			if (spawnDist(gen) == 0 && !e->GetMflg())
+			{
+				e->App(p_list);
+			}
+		}
+	}
 }
 
 void C_GamePlay::Reset()

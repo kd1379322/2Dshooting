@@ -50,6 +50,12 @@ public:
 	// GUI処理
 	void ImGuiUpdate();
 
+	void EnemyApp(
+		int p_RespawnNum,
+		int p_dist,
+		int p_CheckSec,
+		std::vector<std::shared_ptr<C_EnemyBase>>& p_list);
+
 	bool GetResultGo_T() { return NextScene; }
 
 	int GetRastScore() { return score_tmp; }

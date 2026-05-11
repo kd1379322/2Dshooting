@@ -12,7 +12,7 @@ public:
 
 
 	//出現処理
-	void App();
+	void App(const std::vector<std::shared_ptr<C_EnemyBase>>& p_list);
 	void PosApp(Math::Vector2 p_pos);
 
 	// 更新処理
@@ -22,7 +22,7 @@ public:
 	virtual void Draw2D();
 
 	//ランダムな位置に出現
-	float RandomApp();
+	float RandomApp(const std::vector<std::shared_ptr<C_EnemyBase>>& p_list);
 
 	bool BulletHit(Math::Vector2 p_pos);
 
