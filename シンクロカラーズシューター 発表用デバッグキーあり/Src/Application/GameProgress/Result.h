@@ -56,5 +56,9 @@ private:
 	Math::Matrix m_nummat[MAX_DIGITS];
 
 	Math::Color color;
+
+	float h_sc = 0.5f;
+	float h_scAdd = -0.05f;
+
 };
 

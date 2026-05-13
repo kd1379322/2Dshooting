@@ -54,7 +54,7 @@ void C_Ranking::Update()
 		}
 
 		m_scaleMat = Math::Matrix::CreateScale(0.4f, 0.4f, 0);
-		m_transMat = Math::Matrix::CreateTranslation(450, 127 * i - 90, 0);
+		m_transMat = Math::Matrix::CreateTranslation(RankposX[i], 129 * i - 95, 0);
 		m_Rankmat[i] = m_scaleMat * m_transMat;
 	}
 }
@@ -72,43 +72,53 @@ void C_Ranking::Draw()
 	SHADER.m_spriteShader.SetMatrix(m_Rankingmat);//行列のセット
 	SHADER.m_spriteShader.DrawTex(&m_Rankingtex, rect, 1.0f);//画像の描画
 
+	//RankposX = 450;
+
 	for (int i = 0; i < 3; i++)
 	{
 		if (Rk[i] < 50000)
 		{
-			rect = { 690,220,230,210 };//E
+			RankposX[i] = 450;
+			r_rect = { 690,220,230,210 };//E
 		}
 		else if (Rk[i] < 100000)
 		{
-			rect = { 460,220,230,210 };//D
+			RankposX[i] = 450;
+			r_rect = { 460,220,230,210 };//D
 		}
 		else if (Rk[i] < 300000)
 		{
-			rect = { 230,220,230,210 }; //C
+			RankposX[i] = 450;
+			r_rect = { 230,220,230,210 }; //C
 		}
 		else if (Rk[i] < 500000)
 		{
-			rect = { 0,220,230,210 }; //B
+			RankposX[i] = 460;
+			r_rect = { 0,220,230,210 }; //B
 		}
 		else if (Rk[i] < 800000)
 		{
-			rect = { 690,0,230,210 };  //A
+			RankposX[i] = 450;
+			r_rect = { 690,0,230,210 };  //A
 		}
 		else if (Rk[i] < 1000000)
 		{
-			rect = { 460,0,230,210 };	//A+
+			RankposX[i] = 460;
+			r_rect = { 460,0,230,210 };	//A+
 		}
 		else if (Rk[i] < 1500000)
 		{
-			rect = { 230,0,230,210 };	//S
+			RankposX[i] = 460;
+			r_rect = { 230,0,230,210 };	//S
 		}
 		else
 		{
-			rect = { 0,0,230,210 };		//S+
+			RankposX[i] = 470;
+			r_rect = { 0,0,230,210 };		//S+
 		}
 
 		SHADER.m_spriteShader.SetMatrix(m_Rankmat[i]);//行列のセット
-		SHADER.m_spriteShader.DrawTex(&m_RankTex, rect, 1.0f);//画像の描画
+		SHADER.m_spriteShader.DrawTex(&m_RankTex, r_rect, 1.0f);//画像の描画
 	}
 
 

@@ -16,16 +16,6 @@ void C_Score::Update()
 	}
 
 
-	if (m_comboflg)
-	{
-		m_combo_cnt++;
-		if (m_combo_cnt >= 300)
-		{
-			m_combo = 0;
-			m_comboflg = false;
-		}
-	}
-
 	unsigned long tmp = m_score;
 
 	for (int i = MAX_DIGITS - 1; i >= 0; --i)
@@ -116,8 +106,6 @@ void C_Score::ScoreUp()
 	}
 
 	m_combo++;
-	m_combo_cnt = 0;
-	m_comboflg = true;
 }
 
 void C_Score::Release()

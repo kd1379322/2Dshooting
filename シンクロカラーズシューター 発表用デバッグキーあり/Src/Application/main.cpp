@@ -33,11 +33,12 @@ bool Application::Init(int w, int h)
 	//===================================================================
 	// ウィンドウ作成
 	//===================================================================
-	if (m_window.Create(w, h, "シンクロカラーズシューター", "Window") == false) {
+
+	if (m_window.Create(w, h, "シンクロカラーズシューター", "Window") == false)
+	{
 		MessageBoxA(nullptr, "ウィンドウ作成に失敗", "エラー", MB_OK);
 		return false;
 	}
-
 	//===================================================================
 	// フルスクリーン確認
 	//===================================================================
@@ -45,6 +46,7 @@ bool Application::Init(int w, int h)
 	/*if (MessageBoxA(m_window.GetWndHandle(), "フルスクリーンにしますか？", "確認", MB_YESNO | MB_ICONQUESTION | MB_DEFBUTTON2) == IDYES) {
 		bFullScreen = true;
 	}*/
+	ShowCursor(false);
 
 
 	//===================================================================

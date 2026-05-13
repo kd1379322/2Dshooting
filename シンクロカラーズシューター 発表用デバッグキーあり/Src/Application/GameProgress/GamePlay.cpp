@@ -146,7 +146,6 @@ void C_GamePlay::Update(bool p_diff)
 {
 	GameCnt++;
 	m_countdown->Update();
-	m_text->Update();
 
 	if (m_waitCnt <= 240)
 	{
@@ -276,7 +275,7 @@ void C_GamePlay::Update(bool p_diff)
 		{
 
 			EnemyApp(5, 299,0,m_enemyList);
-			EnemyApp(3, 299,0,m_multi_enemyList);
+			EnemyApp(3, 299,3,m_multi_enemyList);
 		}
 
 		//==============================
@@ -651,6 +650,7 @@ void C_GamePlay::Update(bool p_diff)
 		i->Update();
 	}
 
+	m_text->Update();
 
 }
 

@@ -12,6 +12,7 @@ void C_Result::Init()
 	m_dispScore = 0;
 	m_waitCnt = 0;
 	t_Alpha = 0.0f;
+	h_sc = 0.5f;
 
 	FILE* fp;
 
@@ -55,10 +56,10 @@ void C_Result::Init()
 
 void C_Result::Update()
 {
-	/*if (GetAsyncKeyState('A') & 0x8000)
+	if (GetAsyncKeyState('A') & 0x8000)
 	{
 		m_score += 10000;
-	}*/
+	}
 
 
 	// --- 2秒待機（60FPS想定） ---
@@ -114,6 +115,21 @@ void C_Result::Update()
 		}
 	}
 
+	if (m_dispScore == m_score)
+	{
+		h_sc += h_scAdd;
+
+		if (h_sc < 0.5f)
+		{
+			h_sc = 0.5f;
+			h_scAdd *= -1;
+		}
+		else if (h_sc > 1.0f)
+		{
+			h_sc = 1.0f;
+			h_scAdd *= -1;
+		}
+	}
 
 	unsigned long tmp = m_dispScore;
 
@@ -139,7 +155,7 @@ void C_Result::Update()
 	m_transMat = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
 	m_mat = m_scaleMat * m_transMat;
 
-	m_scaleMat = Math::Matrix::CreateScale(0.5f, 0.5f, 0);
+	m_scaleMat = Math::Matrix::CreateScale(h_sc, h_sc, 0);
 	m_transMat = Math::Matrix::CreateTranslation(60, 20, 0);
 	m_r_mat = m_scaleMat * m_transMat;
 
@@ -204,8 +220,7 @@ void C_Result::Draw2D()
 	}
 	else
 	{
-		rect = { 0,0,230,210 };
-		//S+
+		rect = { 0,0,230,210 };		//S+
 	}
 
 	

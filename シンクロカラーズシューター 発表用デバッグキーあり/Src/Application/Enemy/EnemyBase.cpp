@@ -63,15 +63,22 @@ float C_EnemyBase::RandomApp(
 		dist(minY, maxY);
 
 	const float SafeRange = 80.0f;
-
-	// 最大試行回数
 	const int MaxTry = 100;
+
+	//==============================
+	// 一番離れていた候補
+	//==============================
+	float BestY = minY;
+	float BestDistance = 0.0f;
 
 	for (int i = 0; i < MaxTry; i++)
 	{
 		float y = dist(gen);
 
 		bool overlap = false;
+
+		// この座標の最小距離
+		float MinDistance = 999999.0f;
 
 		for (auto& e : p_list)
 		{
@@ -80,24 +87,42 @@ float C_EnemyBase::RandomApp(
 
 			float dy = abs(y - e->Getpos().y);
 
+			// 最小距離更新
+			if (dy < MinDistance)
+			{
+				MinDistance = dy;
+			}
+
+			// 重なり判定
 			if (dy < SafeRange)
 			{
 				overlap = true;
-				break;
 			}
 		}
 
-		// 重なっていなければ採用
+		//==============================
+		// 重ならなければ即採用
+		//==============================
 		if (!overlap)
 		{
 			return y;
 		}
+
+		//==============================
+		// 一番マシな位置を保存
+		//==============================
+		if (MinDistance > BestDistance)
+		{
+			BestDistance = MinDistance;
+			BestY = y;
+		}
 	}
 
 	//==============================
-	// 見つからなかった場合
+	// 完全には避けられなかった場合
+	// 一番離れていた位置を返す
 	//==============================
-	return dist(gen);
+	return BestY;
 }
 
 bool C_EnemyBase::BulletHit(Math::Vector2 p_pos)

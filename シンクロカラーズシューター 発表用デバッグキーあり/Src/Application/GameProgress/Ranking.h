@@ -48,7 +48,9 @@ private:
 
 	Math::Matrix m_s_mat;		//行列
 
+	Math::Rectangle r_rect;
 
+	int RankposX[3] = {450};
 
 	float s_Alpha = 1.0f;
 	float s_alphaAdd = -0.01f;
