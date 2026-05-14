@@ -23,8 +23,6 @@
 
 void C_GamePlay::Init()
 {
-	
-
 
 	GameCnt = 0;
 	Bulletkeyflg = false;
@@ -34,8 +32,6 @@ void C_GamePlay::Init()
 	m_waitEndCnt = 0;
 	m_player = std::make_shared<C_Player>();
 	m_player->Init();
-
-
 
 	for (int i = 0; i < 3; ++i)m_enemyList.push_back(std::make_shared<C_Red>());
 	for (int i = 0; i < 3; ++i)m_enemyList.push_back(std::make_shared<C_Blue>());
@@ -139,7 +135,6 @@ void C_GamePlay::Init()
 		m_circle[i]->Init();
 	}
 
-	
 }
 
 void C_GamePlay::Update(bool p_diff)
@@ -158,7 +153,6 @@ void C_GamePlay::Update(bool p_diff)
 		else if (m_waitCnt == 240)
 		{
 			m_countdown->App();
-			//SOUND.CountDown2_SE();
 			SOUND.Start_SE();
 		}
 
@@ -235,6 +229,11 @@ void C_GamePlay::Update(bool p_diff)
 
 					m_timer->SkipTimer();
 				}
+
+				if (GetAsyncKeyState(VK_F2) & 0x8000) {
+					Debug = true;
+					m_timer->StopTimer();
+				}
 			}
 
 			if(Debug)
@@ -279,9 +278,10 @@ void C_GamePlay::Update(bool p_diff)
 		}
 
 		//==============================
-		// 更新
+		// キャラ更新
 		//==============================
 		m_player->Update();
+		
 		for (auto& e : m_enemyList)
 		{
 			e->Update();
@@ -629,7 +629,7 @@ void C_GamePlay::Update(bool p_diff)
 	}
 
 	//==============================
-	// エフェクト,UI
+	// エフェクト,UI更新
 	//==============================
 	m_heart->Update();
 	m_heart->DownAlpha(m_player->Getpos());
@@ -656,9 +656,6 @@ void C_GamePlay::Update(bool p_diff)
 
 void C_GamePlay::Draw2D()
 {
-
-
-
 	m_heart->Draw2D(m_player->GetHp());
 	m_score->Draw2D();
 	m_score->DownAlpha(m_player->Getpos());

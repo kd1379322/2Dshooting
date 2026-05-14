@@ -3,8 +3,8 @@
 void C_Sound::Init()
 {
 	//音量初期値
-	Bgmvol = 0.05f;	// MAXは 1.0f
-	Sevol = 0.08f;   // MAXは 1.0f
+	Bgmvol = 0.08f;	// MAXは 1.0f
+	Sevol  = 0.08f;	// MAXは 1.0f
 
 	//タイトルBGMの読み込み
     //①容量確保

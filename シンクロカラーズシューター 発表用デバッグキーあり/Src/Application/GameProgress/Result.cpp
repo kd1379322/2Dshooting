@@ -56,12 +56,6 @@ void C_Result::Init()
 
 void C_Result::Update()
 {
-	if (GetAsyncKeyState('A') & 0x8000)
-	{
-		m_score += 10000;
-	}
-
-
 	// --- 2秒待機（60FPS想定） ---
 	if (m_waitCnt < 60)
 	{

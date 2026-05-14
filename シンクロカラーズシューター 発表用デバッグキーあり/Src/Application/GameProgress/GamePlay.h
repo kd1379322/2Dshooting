@@ -75,7 +75,7 @@ private:
 
 	bool diff = false;
 
-	bool Debug = true;
+	bool Debug = false;
 
 	int GameCnt;
 	std::shared_ptr<C_Player> m_player = nullptr;
