@@ -1,0 +1,77 @@
+#pragma once
+
+class C_Player
+{
+public:
+	C_Player(){}
+	~C_Player() {}
+
+	// 初期設定
+	void Init();
+
+	// 更新処理
+	void Update();
+
+	void AnmUpdate();
+
+	// 描画処理
+	void Draw2D(int i);
+
+	// GUI処理
+	void ImGuiUpdate();
+
+	Math::Vector2 Getpos() { return m_pos; }
+	
+	bool GetMflg() { return Moveflg; }
+
+	int GetHp() { return Hp; }
+	bool GetDif() { return DamegeIframes; }
+
+	bool EnemyHit(Math::Vector2 p_pos);
+	bool C_EnemyHit(Math::Vector2 p_pos,int a);
+
+	void Damege();
+
+private:
+
+	void Relese();
+
+	const float m_moveSpeed = 16.0f;	//移動速度
+
+	const float ScreenTop = 360;	
+	const float ScreenBottom = -360;	
+	const float ScreenLeft = -640;	
+	const float ScreenRight = 640;	
+
+	const float PlayerSize = 32;	
+	
+	bool Moveflg = true;					//行動用フラグ
+
+	bool DamegeIframes = false;
+	int DamegeIframesCnt = 0;
+
+	float playerAlpha = 1.0f;
+	static const int MHp = 3;	//HPの最大値
+	int Hp = MHp;						//HP
+
+	// アニメーション用
+	float m_anime = 0;
+
+	KdTexture m_Tex;			//画像用	
+	KdTexture m_f_Tex;			//画像用	
+
+	Math::Vector2 m_pos;		//座標
+	Math::Vector2 m_fpos;		//座標
+
+	Math::Matrix m_transMat;	//移動行列
+	Math::Matrix m_scaleMat;	//拡大行列
+	Math::Matrix m_rotationMat;	//回転行列
+	Math::Matrix m_mat;			//プレイヤー行列
+	Math::Matrix m_fmat;			//プレイヤー行列
+
+	Math::Rectangle rect;	//プレイヤー切り取り範囲
+	Math::Rectangle f_rect;	//プレイヤー切り取り範囲
+
+
+};
+

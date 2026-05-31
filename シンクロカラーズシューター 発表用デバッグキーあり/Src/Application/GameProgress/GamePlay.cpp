@@ -467,7 +467,7 @@ void C_GamePlay::Update(bool p_diff)
 						{
 							if (!m_copyenemy[j]->GetMflg())
 							{
-								m_copyenemy[j]->PosApp(e->Getpos());
+								m_copyenemy[j]->PosApp({ e->Getpos().x + 64,e->Getpos().y});
 								break;
 							}
 						}
@@ -480,7 +480,7 @@ void C_GamePlay::Update(bool p_diff)
 						{
 							if (!m_copyenemy[j]->GetMflg())
 							{
-								m_copyenemy[j]->PosApp(e->Getpos());
+								m_copyenemy[j]->PosApp({ e->Getpos().x + 64,e->Getpos().y });
 								break;
 							}
 						}
@@ -493,7 +493,7 @@ void C_GamePlay::Update(bool p_diff)
 						{
 							if (!m_copyenemy[j]->GetMflg())
 							{
-								m_copyenemy[j]->PosApp(e->Getpos());
+								m_copyenemy[j]->PosApp({ e->Getpos().x + 64,e->Getpos().y });
 								break;
 							}
 						}
